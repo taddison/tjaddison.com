@@ -49,7 +49,7 @@ Very briefly, this might mean you split your ecosystem into a few areas (perhaps
 
 ## Ownership of problems & their solutions end to end
 
-First and foremost we're problem solvers.  The best problem I've worked with have all shared the same fundamental trait - *they own the problem*.  I'd hesitate to call the following a framework, but I've seen very similar steps executed by some of the most respected problem solvers I've seen in action:
+First and foremost we're problem solvers.  The best problem solvers I've worked with have all shared the same fundamental trait - *they own the problem*.  I'd hesitate to call the following a framework, but I've seen very similar steps executed by some of the most respected problem solvers I've seen in action:
 
 - Understand the problem
   - Why are we solving this problem
