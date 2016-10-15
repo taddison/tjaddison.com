@@ -54,7 +54,7 @@ First and foremost we're problem solvers.  The best problem solvers I've worked 
   - What will we gain
   - How willwe know if we've solved the problem
 - Understand how the problem might be solved
-  - Explore a few different options, even unfeasible now (what _might_ another solution look like?)
+  - Explore a few different options, even if unfeasible now (what _might_ another solution look like?)
 - Understand how this particular implementation will work
   - Any weaknesses, positive-side-effects
   - What are the unknowns
