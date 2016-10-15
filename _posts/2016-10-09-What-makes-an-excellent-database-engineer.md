@@ -90,7 +90,7 @@ Unlike most other customers the system doesn't have a way of making these proble
 
 ## Summary & Additional Reading
 
-Excellence doesn't happen by accident - it is something which you have to continually and deliberately work towards.  I've outlined what is the template I currently use when having discussions about excellence in database engineering with others or for my own introspection.  The list is really just a jumping-off point, and I hope to continue having tricky conversations with brilliant people about what excellence looks like to them.
+Excellence doesn't happen by accident - it is something which you have to continually and deliberately work towards.  I've outlined  the template I currently use when having discussions about excellence in database engineering with others or for my own introspection.  The list is really just a jumping-off point, and I hope to continue having interesting & challenging conversations with brilliant people about what excellence looks like to them.
 
 Below are a handful of interesting articles/books which served as inspiration for parts of this post.  If you have any questions or thoughts about what makes an excellent engineer (database or otherwise) drop me a line or leave a comment below.
 
