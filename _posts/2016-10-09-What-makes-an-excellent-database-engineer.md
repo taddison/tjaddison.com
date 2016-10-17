@@ -52,7 +52,7 @@ First and foremost we're problem solvers.  The best problem solvers I've worked 
 - Understand the problem
   - Why are we solving this problem
   - What will we gain
-  - How willwe know if we've solved the problem
+  - How will we know if we've solved the problem
 - Understand how the problem might be solved
   - Explore a few different options, even if unfeasible now (what _might_ another solution look like?)
 - Understand how this particular implementation will work
@@ -82,7 +82,7 @@ Consider an example of a backup failure.  Standard response might be to re-run t
 
 While everyone may care about the data, the scalability, and the performance of the [database] system as it pertains to their application, as a data engineer you are ultimately accountable for all of those concerns, for every application.  As you're making changes you should not only be thinking about the end-customer and your internal customers (colleagues), but also the system that you're modifying & maintaining.
 
-Building a healthy level of scepticism will set you in good stead for ensuring your keep your data systems correct (free from corruption), available, and performant.  As the feature comes in which is going to add one call per second to some component, you'll be thinking about what happens at one and two orders of magnitude above that (and if you don't, who will?).  When you get access to your SQL Azure instance that supports 1000 TPS, you'll be the one verifying that and finding out what happens when you exceed that number - perhaps even coming up with a list of options for what you could do in that event.
+Building a healthy level of scepticism will set you in good stead for ensuring you keep your data systems correct (free from corruption), available, and performant.  As the feature comes in which is going to add one call per second to some component, you'll be thinking about what happens at one and two orders of magnitude above that (and if you don't, who will?).  When you get access to your SQL Azure instance that supports 1000 TPS, you'll be the one verifying that and finding out what happens when you exceed that number - perhaps even coming up with a list of options for what you could do in that event.
 
 There are many ways a given system can start to go south, most of which won't manifest as an application issue until it is too late.  This means you and your team have to monitor and be responsible for understanding the state of the system independent of the applications they support.  Your goal should always be to have the system alert you (or self-heal) so the problem is solved before it bubbles up to the application.
 
