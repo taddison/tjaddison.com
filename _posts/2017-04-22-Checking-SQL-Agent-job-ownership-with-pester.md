@@ -62,6 +62,8 @@ from msdb.dbo.sysmanagement_shared_registered_servers_internal as ssrsi
 join msdb.dbo.sysmanagement_shared_server_groups_internal as sssgi
 on sssgi.server_group_id = ssrsi.server_group_id
 where sssgi.name = 'Instances to Test'" | Select-Object -ExpandProperty server_name
+
+invoke-pester -Script @{Path='.';Parameters= @{serverList=$servers}}
 ```
 
 **SQLAgent.tests.ps1**
