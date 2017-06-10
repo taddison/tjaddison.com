@@ -30,3 +30,8 @@ gems:
 exclude:
   - Gemfile
   - Gemfile.lock
+
+disqus:
+  shortname: tjaddison
+
+google_analytics: UA-85466441-1
