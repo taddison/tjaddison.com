@@ -6,7 +6,7 @@ title: Checking SQL Agent job ownership with Pester
 Ensuring your jobs are all owned by SA helps to ensure they'll not fail when a non-SA account that owns them is disabled, or the authority (e.g. domain controller, network) is not functioning correctly.
 
 There are plenty of ways of going about this, though the most flexible I've found so far is making it an automated infrastructure test with Pester.  If you're not familiar with Pester I encourage you to check out [Pester Github site](https://github.com/pester/Pester), and then for more SQL specific details check out the great category of posts by [SQL DBA With a Beard](https://sqldbawithabeard.com/tag/pester/).
-
+<!--more-->
 Once Pester is configured, the simplest way to execute a test is to run the following.
 
 ```powershell

@@ -6,7 +6,7 @@ permalink: /about/
 
 Hi! I'm Tim Addison and this is my blog.
 
-I love to build things and really understand how they work.  Right now the three things that I am particularly interested in are:
+I love to build things and really understand how they work.  Right now the things that I am particularly interested in are:
 
 - SQL Server
 - Scaling an engineering organisation
