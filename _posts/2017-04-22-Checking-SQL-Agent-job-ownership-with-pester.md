@@ -48,9 +48,9 @@ The list of servers could come from a text file, or a [CMS Server](https://docs.
 
 ## Moving from a single script to a solution
 
-As you go on to write more tests you will probably take advantage of Pester's ability to isolate tests to test files (with the .tests.ps1 extension) and want to run them all.  Typically you'll want to manage the list of servers you execute the test against outside of the test itself.  What I recommend is making the server list a common parameter for all your test files, and then populating the server list in a 'runner' class.
+As you go on to write more tests you will probably want to take advantage of Pester's ability to isolate tests in test files (with the .tests.ps1 extension) and want to run them all.  Typically you'll want to manage the list of servers you execute the test against outside of the test itself.  What I recommend is making the server list a common parameter for all your test files, and then populating the server list in a 'runner' class.
 
-In the below example you'll see we connect to a CMS to pull the list of servers to execute on (based on a group called 'Instances to Test', and we have also modified the query to ignore jobs in the 'Report Server' category, which is what SSRS uses to create jobs (none of which are ever owned by SA).
+In the below example you'll see we connect to a CMS to pull the list of servers to execute against (based on a group called 'Instances to Test').  The query has also been modified to ignore jobs in the 'Report Server' category, which is what SSRS uses to create jobs (none of which are ever owned by SA).
 
 **RunTests.ps1**
 ```powershell
@@ -85,7 +85,7 @@ foreach($server in $servers) {
 
 As you create additional infrastructure tests you can drop them in the folder and Pester will automatically run them on your list of target servers.  I've got a repository which contains some example tests on [Github](https://github.com/taddison/SQLInfrastructureTests).
 
-Note that the test we have coded for looks to ensure all jobs are owned by SA.  To workaround the issues described earlier (e.g. can't authenticate a user account) we should say that *user accounts* shouldn't own jobs.  In my current environment that translates to all jobs must be owned by SA.  In your environment you might have a dedicated SQL account for jobs (or something similar), and so you may wish to modify this check.
+Note that the test we have coded for looks to ensure all jobs are owned by SA.  To workaround the issues described at the start of the post (e.g. can't authenticate a user account to run a job) we should say that *user accounts* shouldn't own jobs.  In my current environment that translates to all jobs must be owned by SA.  In your environment you might have a dedicated SQL account for jobs (or something similar), and so you may wish to modify this check.
 
 ## Additional Reading
 
@@ -94,4 +94,3 @@ Note that the test we have coded for looks to ensure all jobs are owned by SA.  
 [ReportUnit](http://relevantcodes.com/reportunit/) Take the output of Invoke-Pester (which can be told to produce XML results files rather than dumping to the screen) and produce rather nice looking html reports.
 
 [tSQLScheduler](https://github.com/taddison/tsqlScheduler) Github project used to create agent jobs automatically from data, ensuring they're always created as SA.
-
