@@ -4,12 +4,11 @@ title: About
 permalink: /about/
 ---
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](https://jekyllrb.com/)
+Hi! I'm Tim Addison and this is my blog.
 
-You can find the source code for the Jekyll new theme at:
-{% include icon-github.html username="jekyll" %} /
-[minima](https://github.com/jekyll/minima)
+I love to build things and really understand how they work.  Right now the three things that I am particularly interested in are:
 
-You can find the source code for Jekyll at
-{% include icon-github.html username="jekyll" %} /
-[jekyll](https://github.com/jekyll/jekyll)
+- SQL Server
+- Scaling an engineering organisation
+
+If you'd like to talk to me about any of these shoot me an email or get in touch via twitter.  Unless you're a recruiter, in which case please don't!
