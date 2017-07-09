@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Checking SQL Agent job ownership with Pester
+title: Using the SQL Infrastructure Tests repo in your environment
 ---
 The [SQL Infrastructure Tests](https://github.com/taddison/SQLInfrastructureTests) repo is generic and knows nothing about your infrastructure.  This makes it very easy to clone and use anywhere, but also means you need to provide some configuration information to actually make it useful in your environment.  Typically you want that environment specific information to also be in source control, you might be tempted to create a fork of the repo and make customisations for your environment.
 
