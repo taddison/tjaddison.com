@@ -3,10 +3,11 @@ layout: post
 title: Checking SQL Agent job ownership with Pester
 ---
 
-Ensuring your jobs are all owned by SA helps to ensure they'll not fail when a non-SA account that owns them is disabled, or the authority (e.g. domain controller, network) is not functioning correctly.
+Ensuring your jobs are all owned by SA is a best practice I've used to help minimise the chance of an SA job not running correctly due to the owners login being disabled, or there being an issue with authentication.
 
-There are plenty of ways of going about this, though the most flexible I've found so far is making it an automated infrastructure test with Pester.  If you're not familiar with Pester I encourage you to check out [Pester Github site](https://github.com/pester/Pester), and then for more SQL specific details check out the great category of posts by [SQL DBA With a Beard](https://sqldbawithabeard.com/tag/pester/).
+There are plenty of ways of going about this, though the most flexible I've found so far is making it an automated infrastructure test with Pester.  If you're not familiar with Pester I encourage you to check out the [Pester Github site](https://github.com/pester/Pester), and then for more SQL specific details browse the Pester category of posts by [SQL DBA With a Beard](https://sqldbawithabeard.com/tag/pester/).
 <!--more-->
+
 Once Pester is configured, the simplest way to execute a test is to run the following.
 
 ```powershell
@@ -48,9 +49,9 @@ The list of servers could come from a text file, or a [CMS Server](https://docs.
 
 ## Moving from a single script to a solution
 
-As you go on to write more tests you will probably want to take advantage of Pester's ability to isolate tests in test files (with the .tests.ps1 extension) and want to run them all.  Typically you'll want to manage the list of servers you execute the test against outside of the test itself.  What I recommend is making the server list a common parameter for all your test files, and then populating the server list in a 'runner' class.
+As you go on to write more tests you will probably want to take advantage of Pester's ability to isolate tests in test files (with the .tests.ps1 extension) and want to run them all.  Typically you'll want to manage the list of servers you execute the test against outside of the test itself.  What I suggest is making the server list a common parameter for all your SQL test files, and then populating the server list in a 'runner' class.
 
-In the below example you'll see we connect to a CMS to pull the list of servers to execute against (based on a group called 'Instances to Test').  The query has also been modified to ignore jobs in the 'Report Server' category, which is what SSRS uses to create jobs (none of which are ever owned by SA).
+In the below example you'll see we connect to a CMS to pull the list of servers to execute against (based on a group called 'Instances to Test').  The query has also been modified to ignore jobs in the 'Report Server' category, which is what SSRS uses when it creates jobs to support subscriptions (none of which are ever owned by SA).
 
 **RunTests.ps1**
 ```powershell
@@ -72,7 +73,13 @@ Param(
     [object]$servers
 )
 
-$query = "select count(*) as Jobs from msdb.dbo.sysjobs as j join msdb.dbo.syscategories as c on c.category_id = j.category_id where j.owner_sid <> 0x01 and c.Name <> 'Report Server'"
+$query = "
+select count(*) as Jobs 
+from msdb.dbo.sysjobs as j 
+join msdb.dbo.syscategories as c 
+on c.category_id = j.category_id 
+where j.owner_sid <> 0x01 
+and c.Name <> 'Report Server'"
 
 foreach($server in $servers) {
     Describe "SQL Agent on $server" {
