@@ -10,6 +10,7 @@ The public repo we're consuming is [SQLInfrastructureTests](https://github.com/t
 <!--more-->
 The Install.ps1 script lives in our helper and will either clone the repository (if it doesn't exist), or update it if does.
 
+**Install.ps1**
 ```powershell
 $repoName = "SQLInfrastructureTests"
 $repoUri = "https://github.com/taddison/$repoName.git"
@@ -24,6 +25,7 @@ if(!(Test-Path -path "../$repoName")) {
 
 The RunTests.ps1 script then executes the pester tests that exist in the public repository.  Because this file lives in our private repository, you would be able to use your own server names (or pull them from a CMS), and optionally specify subsets of tests to execute against different servers.
 
+**RunTests.ps1**
 ```powershell
 $servers = @('localhost','.')
 $repoName = "SQLInfrastructureTests"
