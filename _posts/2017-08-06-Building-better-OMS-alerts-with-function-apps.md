@@ -113,6 +113,7 @@ public static async Task<object> Run(HttpRequestMessage req, TraceWriter log)
     var slackUri = "https://requestb.in/su78d1su";
     var slackChannel = "#webhook-tests";
     var slackUsername = "OMS";
+    var criticalMeasurementCount = 3;
 
     var data = await req.Content.ReadAsAsync<OMSPayload>();
 
@@ -132,7 +133,7 @@ public static async Task<object> Run(HttpRequestMessage req, TraceWriter log)
     {
         message +=  $" - {result.Computer}:[{result.Warning} >{warningThreshold}% | {result.Critical} >{criticalThreshold}% | {(result.Average/100):P0} avg]";
         
-        if(result.Critical > 0)
+        if(result.Critical >= criticalMeasurementCount)
         {
             critical = true;
         }
