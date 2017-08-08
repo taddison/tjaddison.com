@@ -22,7 +22,9 @@ Getting all these configured is beyond the scope of this blog post.
 We're going to configure an OMS alert to fire when CPU utilisation is high.  The values I'm usingn for thresholds/timings are useful in my current environment and might not be right for you - modify as required.  The query we'll base our alert off is:
 
 ```
-Type=Perf CounterName="% Processor Time" | measure avg(CounterValue) by Computer interval 1MINUTE
+Perf 
+| where CounterName == "% Processor Time" 
+| summarize AggregatedValue = avg(CounterValue) by bin(TimeGenerated, 1m), Computer
 ```
 
 If you look at this query in Log Analytics you'll see it returns the per-minute CPU utilisation for every machine linked to your OMS account.  We're going to set our alert to evaluate this query every 5 minutes, and look at the prior 5 minutes of data.  In our environment we want to know any time a single computer exceeds our threshold for CPU % for 3 consecutive minutes.  The thresholds we've established to trigger a warning is 75%.  We also want to suppress any alerts following a trigger for 20 minutes (to prevent spam).  In the OMS alert editor that looks like this:
