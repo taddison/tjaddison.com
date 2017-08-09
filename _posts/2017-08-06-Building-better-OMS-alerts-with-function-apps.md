@@ -8,7 +8,7 @@ We'll use a simple function app to not only report which server triggered the al
 
 ![Sample Slack Message](/assets/2017-08-06/sample-slack-message.png)
 
-If you want to skip straight to the final code it is available in [this github repo](https://github.com/taddison/blog-oms-to-slack/tree/master/EndToEnd).
+If you want to skip straight to the final code it is available in [this GitHub repo](https://github.com/taddison/blog-oms-to-slack/tree/master/EndToEnd).
 <!--more-->
 ## Pre-requisites
 - An OMS account ([info](https://docs.microsoft.com/en-us/azure/operations-management-suite/operations-management-suite-overview))
@@ -22,9 +22,7 @@ Getting all these configured is beyond the scope of this blog post.
 We're going to configure an OMS alert to fire when CPU utilisation is high.  The values I'm usingn for thresholds/timings are useful in my current environment and might not be right for you - modify as required.  The query we'll base our alert off is:
 
 ```
-Perf 
-| where CounterName == "% Processor Time" 
-| summarize AggregatedValue = avg(CounterValue) by bin(TimeGenerated, 1m), Computer
+Type=Perf CounterName="% Processor Time" | measure avg(CounterValue) by Computer interval 1MINUTE
 ```
 
 If you look at this query in Log Analytics you'll see it returns the per-minute CPU utilisation for every machine linked to your OMS account.  We're going to set our alert to evaluate this query every 5 minutes, and look at the prior 5 minutes of data.  In our environment we want to know any time a single computer exceeds our threshold for CPU % for 3 consecutive minutes.  The thresholds we've established to trigger a warning is 75%.  We also want to suppress any alerts following a trigger for 20 minutes (to prevent spam).  In the OMS alert editor that looks like this:
@@ -64,20 +62,28 @@ We'll create a few helper classes to work with the incoming data from OMS, as we
 ```csharp
 public class OMSPayload
 {
+    public int WarningThreshold { get; set; }
+    public int CriticalThreshold { get; set; }
     public SearchResults SearchResults { get; set; }
-    public int? WarningThreshold { get; set; }
-    public int? CriticalThreshold { get; set; }
 }
 
 public class SearchResults
 {
-    public List<Value> value { get; set; }
+    public List<Table> Tables { get; set; }
 }
 
-public class Value
+public class Table
 {
-    public string Computer { get; set; }
-    public double AggregatedValue { get; set; }
+    public string TableName { get; set; }
+    public List<Column> Columns { get; set; }
+    public List<List<object>> Rows { get; set; }
+}
+
+public class Column
+{
+    public string ColumnName { get; set; }
+    public string DataType { get; set; }
+    public string ColumnType { get; set; }
 }
 ```
 
@@ -97,7 +103,7 @@ The function app is going to:
 - Determine if we're in a warning or critical state
 - Extract the name of the computer alerting
 - Build a message with the computer name and some simple metrics
-- Send the message to slack
+- Send the message to Slack
 
 The full text of the function (assuming the default input name of req) is below.  Note this excludes the class definitions above, which would normally go at the bottom of the file.
 
@@ -122,11 +128,11 @@ public static async Task<object> Run(HttpRequestMessage req, TraceWriter log)
     var warningThreshold = data?.WarningThreshold ?? 75;
     var criticalThreshold = data?.CriticalThreshold ?? 90;
 
-    var aggregatedResults = data.SearchResults.value.GroupBy(v => v.Computer)
+    var aggregatedResults = data.SearchResults.Tables[0].Rows.GroupBy(r => r[1].ToString())
                             .Select(g => new {  Computer = g.Key
-                                                ,Average = g.Average(v => v.AggregatedValue)
-                                                ,Warning = g.Count(v => v.AggregatedValue >= warningThreshold)
-                                                ,Critical = g.Count(v => v.AggregatedValue >= criticalThreshold) });
+                                                ,Average = g.Average(r => Double.Parse(r[2].ToString()))
+                                                ,Warning = g.Count(r =>  Double.Parse(r[2].ToString()) >= warningThreshold)
+                                                ,Critical = g.Count(r =>  Double.Parse(r[2].ToString()) >= criticalThreshold) });
 
     var message = string.Empty;
     var critical = false;
@@ -169,3 +175,5 @@ You'll notice the code also uses a RequestBin for testing the Slack alerts.  Whe
 ## Next steps
 
 As configured, the solution will now start routing Slack alerts to your chosen channel, enriched with information from the search results included with each alert.  In the future we'll extend the solution to support fan-out (1 alert notifying multiple channels), notifications (conditional @channel to get attention), and decoupling the notification from the trigger (using Event Hubs).
+
+Updated 2017-09-08 for new OMS query langauge/search payload.
