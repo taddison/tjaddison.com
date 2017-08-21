@@ -2,7 +2,7 @@
 layout: post
 title: Monitoring disk, CPU, and memory with OMS
 ---
-In the [previous article](/2017-08-06-Building-better-OMS-alerts-with-function-apps) we built an OMS to Slack function app to alert on high CPU usage.  We'll now extend that so we have alerts in place to cover us for the infrastructure basics - CPU, Memory and Drive Space.
+In the [previous article](/2017/08/12/Analysing-blob-storage-metrics-with-Power-BI) we built an OMS to Slack function app to alert on high CPU usage.  We'll now extend that so we have alerts in place to cover us for the infrastructure basics - CPU, Memory and Drive Space.
 
 ![Example Alerts](/assets/2017-08-21/AlertSample.png)
 
