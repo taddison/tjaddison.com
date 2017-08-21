@@ -176,6 +176,6 @@ You'll notice the code also uses a RequestBin for testing the Slack alerts.  Whe
 
 ## Next steps
 
-As configured, the solution will now start routing Slack alerts to your chosen channel, enriched with information from the search results included with each alert.  In the future we'll extend the solution to support fan-out (1 alert notifying multiple channels), notifications (conditional @channel to get attention), and decoupling the notification from the trigger (using Event Hubs).
+As configured, the solution will now start routing Slack alerts to your chosen channel, enriched with information from the search results included with each alert.  In the future we'll extend the solution to support fan-out (1 alert notifying multiple channels), notifications (conditional @channel to get attention), and decoupling the notification from the trigger.
 
 Updated 2017-09-08 for new OMS query langauge/search payload.
