@@ -8,7 +8,7 @@ We'll use a simple function app to not only report which server triggered the al
 
 ![Sample Slack Message](/assets/2017-08-06/sample-slack-message.png)
 
-If you want to skip straight to the final code it is available in [this GitHub repo](https://github.com/taddison/blog-oms-to-slack/tree/master/EndToEnd).
+If you want to skip straight to the final code it is available in [this GitHub repo](https://github.com/taddison/blog-oms-to-slack/tree/master/SingleFunctionCPU).
 <!--more-->
 ## Pre-requisites
 - An OMS account ([info](https://docs.microsoft.com/en-us/azure/operations-management-suite/operations-management-suite-overview))
@@ -45,7 +45,7 @@ While testing I suggest you use [RequestBin](https://requestb.in/) to capture th
 }
 ```
 
-The IncludeSearchResults tells OMS that we want the search results generated to be included in the webhook payload.  OMS will only include the search results for the machine which has triggered the alert.  You can see an example of the payload generated in [this payload file](https://github.com/taddison/blog-oms-to-slack/blob/master/EndToEnd/test-payload.json).
+The IncludeSearchResults tells OMS that we want the search results generated to be included in the webhook payload.  OMS will only include the search results for the machine which has triggered the alert.  You can see an example of the payload generated in [this payload file](https://github.com/taddison/blog-oms-to-slack/blob/master/SingleFunctionCPU/cpu-payload.json).
 
 The warning & critical threshold values are provided for use in function app, and we'll use them to allow us to have a single OMS alert for both warning & critical, rather than having to create two alerts.
 
