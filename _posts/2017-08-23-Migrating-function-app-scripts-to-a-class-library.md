@@ -10,6 +10,7 @@ The post walks through all the interim steps, though you if you just want to see
 
 - [Start - three function apps as script files](https://github.com/taddison/blog-oms-to-slack/tree/138cd510adb2ceee5aaa272507d797a7aaf27b7c)
 - [End - one class library exposing three functions](https://github.com/taddison/blog-oms-to-slack/tree/master/ClassLibrary)
+
 <!--more-->
 Note: The (repo) links at the end of each step link to a snapshot of the repository at that point in time.
 
