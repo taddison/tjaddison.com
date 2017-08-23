@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Migration function app scripts to a class library
+title: Migrating function app scripts to a class library
 ---
 In the [previous post](/2017/08/21/Monitoring-disk-cpu-and-memory-with-OMS) we created a trio of function apps to send Slack notifications for OMS alerts based on CPU, Memory, and Disk.  These were created using the function app scripts, and the code was stored and tested directly in the Azure portal.
 
