@@ -13,10 +13,10 @@ title: Building an OMS metric alert to Slack bridge with Azure functions
 
 If you want to get started quickly:
 
-- You can see an example of the finished function in [this repo](https://github.com/taddison/blog-oms-to-slack/tree/master/GenericMetricFunction) which you'll need to deploy as an Azure function (updating the Slack endpoint in SlackHelper.cs)
+- You can grab a copy of the finished function app from [this repo](https://github.com/taddison/blog-oms-to-slack/tree/master/GenericMetricFunction) which you'll need to deploy as an Azure function (updating the Slack endpoint in SlackHelper.cs)
 - Configure your alerts using the [examples shown at the bottom](#Sample-Alert-Configs)
 
-Otherwise, read on for more details on what the function look like, and more details on configuring the alerts and overrides.
+Otherwise, read on for more details on what the function looks like, and more details on configuring the alerts and overrides.
 
 <!--more-->
 ## Solution Overview
@@ -221,8 +221,8 @@ Perf
 The flow of a webhook through the Azure function is:
 
 - Webhook with alert configuration (custom JSON) and alert results (SearchResults) calls the OMSMetricToSlack function
-- OMSMetricToSlack parses the data into an Alert object, and then passes that to the AlertProcessor
-- AlertProcessor determines the Computer name (we could be dealing with either a Computer, or some combination of Computer + other value)
+- OMSMetricToSlack parses the data into an Alert object and then passes that to the AlertProcessor
+- AlertProcessor determines the Computer name (we could be dealing with either a Computer or some combination of Computer + other value)
 - AlertProcessor looks up any threshold overrides for the combination of Computer + Metric (could be higher/lower)
 - AlertProcessor compares the metrics against the thresholds, and if ObservationThreshold number of values exceed threshold values the alert is set as warning or critical
   - If the alert is neither a warning or a critical nothing further happens
@@ -280,12 +280,12 @@ public class OMSMetricToSlack
 
 The example alert processor class below contains a few overrides:
 
-- For the database servers we want to warn when CPU exceeds 30%, and critically alert when CPU exceeds 50%
-- For the app servers we want to warn when CPU exceeds 60%, and critically alert when CPU exceeds 85%
+- For the database servers, we want to warn when CPU exceeds 30%, and critically alert when CPU exceeds 50%
+- For the app servers, we want to warn when CPU exceeds 60%, and critically alert when CPU exceeds 85%
 - We want to send all database server alerts to the #database channel in addition to whatever the default channel is
 - We want to send all alerts based on SQL Batch Requests/second to the #database channel too
 
-Note that the Computer should match exactly the name of the computer in OMS (case sensitive).  The name of the performance counter is *not* the name of the performance counter in OMS, but is the value you've given to the *MetricName* property in the alert configuration.  Take care to ensure you do not give duplicate metric names to different alerts.
+Note that the Computer should match exactly the name of the computer in OMS (case sensitive).  The name of the performance counter is *not* the name of the performance counter in OMS, it is the value you've given to the *MetricName* property in the alert configuration.  Take care to ensure you do not give duplicate metric names to different alerts.
 
 ```csharp
 public static class AlertProcessor
