@@ -14,7 +14,7 @@ title: Building an OMS metric alert to Slack bridge with Azure functions
 If you want to get started quickly:
 
 - You can grab a copy of the finished function app from [this repo](https://github.com/taddison/blog-oms-to-slack/tree/master/GenericMetricFunction) which you'll need to deploy as an Azure function (updating the Slack endpoint in SlackHelper.cs)
-- Configure your alerts using the [examples shown at the bottom](#Sample-Alert-Configs)
+- Configure your alerts using the [examples shown at the bottom](#sample-oms-alert-configs)
 
 Otherwise, read on for more details on what the function looks like, and more details on configuring the alerts and overrides.
 
