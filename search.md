@@ -3,8 +3,6 @@ layout: page
 title: Search
 permalink: /search/
 ---
-## Search the site
-
 <div id="google-custom-search">
     <script>
     (function() {
@@ -17,5 +15,8 @@ permalink: /search/
         s.parentNode.insertBefore(gcse, s);
     })();
     </script>
-    <gcse:search></gcse:search>
+    <gcse:searchresults></gcse:searchresults>
+</div>
+<div id="google-search-results">
+    <gcse:searchbox></gcse:searchbox>
 </div>
