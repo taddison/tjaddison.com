@@ -1,6 +1,6 @@
 ---
 layout: page
-title: tjaddison.com
+title: Tim Addison
 subtitle: SQL and other stuff.
 use-site-title: true
 ---
