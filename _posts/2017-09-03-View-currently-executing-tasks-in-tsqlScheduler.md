@@ -29,14 +29,9 @@ outer apply (
 ) as lastResult
 ```
 
-| StartDateTime | DurationSeconds |	Identifier | LastStartTime | LastDurationSeconds | LastIsError |
-|            ---|              ---|         ---|            ---|                  ---|          ---|
-|2017-09-03 12:54:31.110	|5	|TaskName2	|2017-09-03 12:53:16.103	|60	|0|
-|2017-09-03 12:54:31.110	|5	|TaskName	|2017-09-03 12:53:16.103	|60	|0|
-|2017-09-03 12:54:31.110	|5	|TaskName3	|2017-09-03 12:53:16.103	|60	|0|
-|2017-09-03 12:54:31.110	|5	|TaskName1	|2017-09-03 12:53:16.103	|60	|0|
+![Currently executing tasks](/assets/2017-09-03/CurrentlyExecutingTasks.png)
 
-In this example there are four tasks which have been running for 5 seconds.  They normally take 60 seconds to run, and they last ran a minute ago (with no errors).
+In this example there are four tasks which have been running for 55 seconds.  They normally take 60 seconds to run, and they last ran a minute ago (with no errors).
 
 The rest of this post talks through how the mapping works.
 <!--more-->
