@@ -2,6 +2,7 @@
 layout: page
 title: Search
 permalink: /search/
+css: "/css/search.css"
 ---
 <div id="google-custom-search">
     <script>
