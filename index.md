@@ -32,8 +32,7 @@ use-site-title: true
       {% endif %}
       <div class="post-entry">
         {{ post.excerpt }}
-          <a href="{{ post.url | prepend: site.baseurl }}" class="post-read-more">[Read&nbsp;More]</a>
-        {% endif %}
+        <a href="{{ post.url | prepend: site.baseurl }}" class="post-read-more">[Read&nbsp;More]</a>
       </div>
     </div>
 
