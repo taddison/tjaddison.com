@@ -84,13 +84,6 @@ google_analytics: "UA-85466441-1"
 # Google Tag Manager ID
 #gtm: ""
 
-# Facebook App ID
-# fb_app_id: ""
-
-# Excerpt Word Length
-# Truncates the excerpt to the specified number of words on the index page
-excerpt_length: 1000
-
 # Character used to separate site title and description in HTML document title
 # and RSS feed title
 title-separator: "-"
@@ -103,6 +96,7 @@ markdown: kramdown
 highlighter: rouge
 permalink: /:year/:month/:day/:title.html
 paginate: 5
+paginate_path: "page:num/"
 
 kramdown:
   input: GFM
