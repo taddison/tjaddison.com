@@ -1,6 +1,7 @@
 ---
 layout: page
-title: Post List
+title: Post Index
+permalink: /postindex/
 ---
 <ul>
   {% for post in site.posts %}
