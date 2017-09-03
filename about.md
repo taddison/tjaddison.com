@@ -11,4 +11,4 @@ I love to build things and really understand how they work.  Right now the thing
 - SQL Server
 - Scaling an engineering organisation
 
-If you'd like to talk to me about any of these shoot me an email or get in touch via twitter.  Unless you're a recruiter, in which case please don't!
+If you'd like to talk to me about any of these shoot me an email or get in touch via twitter.
