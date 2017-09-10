@@ -30,7 +30,7 @@ Otherwise, read on for more details on what the function looks like, and more de
 For every metric you want to alert on an OMS alert must be configured.  While you can use almost any query you want to trigger an alert, there are a few things you'll have to do for each alert to get it to correctly route through the Azure function:
 
 - The alert must be a metric alert (trigger based on metric measurement rather than number of results)
-- The search query must only group by one value in addition to TimeGenerated (typically ComputerName, though in some cases you might have a Computer + InstanceName, in which case you should concatenate them with a pipe (Computer|InstanceName))
+- The search query must only group by one value in addition to TimeGenerated (typically ComputerName, though in some cases you might have a Computer + InstanceName, in which case you should concatenate them with a pipe (Computer + "|" + InstanceName))
   - If you group by more than one value the alert will not fire in OMS
 - The alert must specify a webhook
 - Has to specify a webhook action
