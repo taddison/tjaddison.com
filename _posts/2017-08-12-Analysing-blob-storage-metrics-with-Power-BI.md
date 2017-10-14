@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Analysing blob storage metrics with Power BI
+share-img: http://tjaddison.com/assets/2017-08-12/CapacityAndMetrics.png
 ---
 Every new storage account has [Storage Analytics](https://docs.microsoft.com/en-us/rest/api/storageservices/about-storage-analytics-metrics) enabled by default, which captures both logs and metrics relating to that storage account.  The metric data is logged into a table in the storage account, which is used to power the metrics you see in the portal but can also be downloaded and used programmatically, by a tool like storage explorer, or with Power BI.
 

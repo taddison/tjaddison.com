@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Checking SQL Agent job ownership with Pester
+share-img: http://tjaddison.com/assets/2017-04-22/PesterFailure.png
 ---
 
 Ensuring your jobs are all owned by SA is a best practice I've used to help minimise the chance of an SA job not running correctly due to the owners login being disabled, or there being an issue with authentication.
