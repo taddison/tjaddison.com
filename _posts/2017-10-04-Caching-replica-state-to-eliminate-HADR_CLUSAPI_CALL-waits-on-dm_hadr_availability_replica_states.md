@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Caching replica state to eliminate HADR_CLUSAPI_CALL waits on dm_hadr_availability_replica_states
-share-img: https://tjaddison.com/assets/2017-10-04/Blocking2.png
+share-img: http://tjaddison.com/assets/2017-10-04/Blocking2.png
 ---
 
 We use [tsqlscheduler](https://github.com/taddison/tsqlScheduler) to manage most of our SQL Jobs (a few hundred jobs in a several overlapping AGs), and when lots of schedules overlap (e.g. many concurrent jobs kick off on the hour) we saw waits and blocking on the function that was attempting to determine whether or not the server was the primary replica:
