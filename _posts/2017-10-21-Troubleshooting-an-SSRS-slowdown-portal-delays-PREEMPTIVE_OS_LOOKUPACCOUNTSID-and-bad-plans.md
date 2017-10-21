@@ -5,11 +5,13 @@ share-img: http://tjaddison.com/assets/2017-10-21/BadPlan.png
 ---
 _This tale takes place on an SSRS 2016 Enterprise instance running on Server 2012 R2._
 
+## The Report Server is slow
+
 Users had reported that the SSRS instance was 'slow', and after opening the portal I could see what they meant.  In addition to the home page taking a very long time to load (minutes), sometimes after loading I'd be presented with a menu bar and no folders/reports (despite knowing I should have seen a bunch of folders and reports).
 
 ![Loading](/assets/2017-10-21/Loading.png)
 
-After quickly querying the execution catalog to see if any reports were running at all (as well as interactive rendering we have subscriptions and rendering happening via the API).
+The first point of call was the execution catalog, to see if any reports were running at all (as well as interactive rendering we have subscriptions and rendering happening via the API).
 
 ```sql
 select		top 100 el.TimeStart
@@ -20,22 +22,22 @@ select		top 100 el.TimeStart
 from		ReportServer.dbo.ExecutionLog3 as el
 order by	el.TimeStart desc
 ```
-This confirmed that subscriptions were working, and some users were using still browsing & running reports interactively.  Knowing that the whole instance wasn't broken I was able to proceed with troubleshooting in a slightly calmer manner.
+This confirmed that subscriptions were working, and some users were using still successfully browsing & running reports interactively.  Knowing that the whole instance wasn't broken I was able to proceed to troubleshoot the specific issue of the portal misbehaving.
 
 <!--more-->
 ## Looking into the portal issues
 
-To summarise the issue after a few minutes of checks:
-	- The portal is very slow to load (no errors observed in the browser console)
-	- Sometimes after the portal loads there are no reports/folders
-	- Looking at user/folder settings (e.g. security) everything appears normal (permissions are intact)
-	- The report API is unaffected (can browse folders + render reports quickly and without any issues)
-	- The servers are not under high load (not capped on CPU/Memory/No space left)
-	- No configuration changes had been made recently
+To summarise the problem after a few minutes of sense checks:
+- The portal is very slow to load (no errors observed in the browser console/no 404s/etc.)
+- Sometimes after the portal loads there are no reports/folders visible
+- Looking at user/folder settings (e.g. security) everything appears normal (permissions are intact, management interface works)
+- The report API is unaffected (can browse folders + render reports quickly and without any issues by navigating to /reportserver instead of /reports)
+- The servers hosting SSRS and the ReportServer database are not under high load (not capped on CPU/Memory/free drive space)
+- No configuration changes had been made recently
 
-The portal looked to be the misbehaving piece, so the next stop was the error logs.  You can read more information about these logs online ([Report Server Service Trace Log](https://docs.microsoft.com/en-us/sql/reporting-services/report-server/report-server-service-trace-log)) - and in our case we're after the portal log file (Microsoft.ReportingServices.Portal.WebHost).  Browsing these logs is always a little painful - someone somewhere has always left a misconfigured report, a report that belongs to someone who is no longer with the company - and shame on me we don't put these logs somewhere centrally queryable and so dealing with those issues tends to come in response to problems only.
+The portal looked to be the problem, so the next stop was the error logs.  You can read more information about these logs online ([Report Server Service Trace Log](https://docs.microsoft.com/en-us/sql/reporting-services/report-server/report-server-service-trace-log)) - and in our case we're after the portal log file (Microsoft.ReportingServices.Portal.WebHost).  Browsing these logs is always a little painful - someone somewhere has always left a misconfigured report, a report that belongs to someone who is no longer with the company - and shame on me we don't put these logs somewhere centrally queryable (and as such the errors only get dealt with when an end user reports an issue).
 
-Ignoring all of the alerts which can get fixed later, there were some unfamiliar alerts all of which have identical stack traces.  The final error message was:
+Ignoring all of the alerts which can get fixed later (subscriptions failing due to bad parameters, etc.), there were some unfamiliar alerts all of which have identical stack traces.  The final error message in the trace was:
 
 ***An error occurred within the report server database.  This may be due to a connection failure, timeout or low disk condition within the database.***
 
@@ -47,7 +49,7 @@ This tells us our next stop should be the ReportServer database.  The call stack
 
 ## ReportServer database
 
-In this case the diagnosis was pretty fast.
+Once we dropped into SQL the diagnosis was pretty easy.
 
 ```sql
 exec sp_whoisactive @get_plans = 1;
@@ -95,31 +97,31 @@ select suser_sname(u.Sid)
 from dbo.Users as u
 ```
 
-The only wait type observed was PREEMPTIVE_OS_LOOKUPACCOUNTSID, and each wait was between 70 and 150 milliseconds.  In this case there are quite a few users with credentials in a domain where the DC is located on a different continent (and the wait times correlate with the round-trip time from server to DC).
+The only wait type observed was PREEMPTIVE_OS_LOOKUPACCOUNTSID, and each wait was between 70 and 150 milliseconds.  In this case there are quite a few users that belong to a domain with a DC is located on a different continent to the report server (and the wait times correlate with the round-trip time from server to DC).
 
-At this point I started looking at things like caching of the lookups (and it turns out there is a cache but only for 128 entries, and given we have 1000s of user records the cache will constantly get cycled if we scan the table).  I was about to start working on the registry to update the setting (after learning about the post from [this SO question](https://stackoverflow.com/questions/31969101/ssrs-users-table), [this support article](https://support.microsoft.com/en-us/help/946358/the-lsalookupsids-function-may-return-the-old-user-name-instead-of-the), and [these docs](https://msdn.microsoft.com/en-us/library/ms721799.aspx)), when I realised that the DC hadn't moved overnight and the report server had been working fine up until today.
+At this point I started looking at caching of the lookups (and it turns out there is a cache but only for 128 entries, and given we have 1000s of user records the cache will constantly get cycled if we are scanning the table).  There is a registry setting to increase the cache size (after learning about the post from [this SO question](https://stackoverflow.com/questions/31969101/ssrs-users-table), [this support article](https://support.microsoft.com/en-us/help/946358/the-lsalookupsids-function-may-return-the-old-user-name-instead-of-the), and [these docs](https://msdn.microsoft.com/en-us/library/ms721799.aspx)), but before I went down that road I reflected that the DC hadn't moved overnight and the report server had been working fine up until today.
 
 ## Plan regression
 
-The problem (and the eventual solution) was the query plan.  Looking again at the query it was clear we were pulling all favourites for a single user, so we shouldn't be scanning the user table and looking up all the account name for every user.
+The problem (and the eventual solution) was the query plan.  Looking again at the query it was clear we were pulling favourites for a single user, so we shouldn't be scanning the user table and looking up all the account name for everyone.
 
-The current plan was scanning the user table twice, and for every row coming from the user table it was evaluating the suser_sname function for every row (represented by the compute scalars in the image below).
+The current plan was scanning the user table twice, and for every row coming from the user table it was evaluating the suser_sname function for every row (represented by the compute scalars in the image below).  The reason we scan twice is the query returns the name of the last modified by user as well as the created by user (for a report).
 
 ![Bad Plan](/assets/2017-10-21/BadPlan.png)
 
-Looking in the table which holds user favourites I could see there was only a small number of rows, and so it seemed likely there was a better plan (especially as the portal had been performing well until recently, and there was no user who had favourite'd every report on the server…).
+Looking in the table which holds user favourites I could see there was only a small number of rows, and so it seemed probable there was a better plan (especially as the portal had been performing well until recently, and there was no user who had favourite'd every report on the server…).
 
-After running the procedure with a few users (including the user who had the most favourites) and only observing good plans I recompiled the procedure, and usual service was instantly returned (the query that had been running for minutes and timing out now finished in less than a second).  The plan is as expected - get the favourites and then perform the Sid lookups only the users who own one of the favourite'd reports.
+After running the procedure with a few users (including the user who had the most favourites) and getting only good (non-scan) plans I recompiled the procedure, and usual service was instantly returned (the query that had been running for minutes and timing out now finished in less than a second).  The plan is as expected - get the favourites and then perform the Sid lookups only the users who own/modified one of the favourite'd reports.
 
 ![Good Plan](/assets/2017-10-21/GoodPlan.png)
 
-What caused the plan to tip in the first place and when I don't know, as our ReportServer database didn't have one of the best features of 2016 enabled at the time (querystore).  That has now been rectified, and going forward the data about execution times/timeouts will now feed into our querystore aggregation system and make spotting this kind of issue easy.
+What caused the plan to tip in the first place and when I don't know, as our ReportServer database didn't have one of the best features of 2016 enabled at the time ([Query Store](https://docs.microsoft.com/en-us/sql/relational-databases/performance/monitoring-performance-by-using-the-query-store)).  That has now been rectified, and going forward the data about execution times/timeouts will now feed into our querystore aggregation system and make spotting this kind of issue easy.
 
 ## Bonus: Missing users
 
-One additional issue we were facing is what happens when a Sid mapping isn't found - rather than cache the miss nothing is cached.  Some of our reports have been around for a long time and their authors are no longer with the company, but SSRS still faithfully attempts to resolve the username of the report creator, sends the request on to the remote DC, and gets nothing back (the suser_sname function returns null).
+One additional issue we were facing is what happens when a Sid mapping isn't found.  Rather than cache the fact there is no account returned for a given sid, nothing is cached and each request goes back to the DC.  Some of our reports have been around for a long time and their their Sids are no longer in the directory - but SSRS still faithfully attempts to resolve the username of the report creator, sends the request on to the remote DC, and gets nothing back (the suser_sname function returns null).
 
-This is easy to test - assume you've got two users (Tim and Tom).  Tim still exists, but Tom doesn't.  We're querying a remote DC for these.  To test yourself you'll need to get the Sid of an expired user account - querying the Users table on an old ReportServer database might be the easiest way (the table also stores the account name, which is how SSRS is able to display information even if the Sid lookup returns null).
+This is easy to test - assume you've got two users (Tim and Tom).  Tim still exists, but Tom doesn't.  We're querying a remote DC for these users.  To test yourself you'll need to get the Sid of an deleted user account - querying the Users table on an old ReportServer database might be the easiest way (the table also stores the account name, which is how SSRS is able to display information even if the Sid lookup returns null).
 
 ```sql
 declare @timSid varbinary=0x00…
