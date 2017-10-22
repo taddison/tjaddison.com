@@ -11,7 +11,7 @@ Users had reported that the SSRS instance was 'slow', and after opening the port
 
 ![Loading](/assets/2017-10-21/Loading.png)
 
-The first point of call was the execution catalog, to see if any reports were running at all (as well as interactive rendering we have subscriptions and rendering happening via the API).
+The first port of call was the execution catalog, to see if any reports were running at all (as well as interactive rendering we have subscriptions and rendering happening via the API).
 
 ```sql
 select		top 100 el.TimeStart
@@ -22,7 +22,8 @@ select		top 100 el.TimeStart
 from		ReportServer.dbo.ExecutionLog3 as el
 order by	el.TimeStart desc
 ```
-This confirmed that subscriptions were working, and some users were using still successfully browsing & running reports interactively.  Knowing that the whole instance wasn't broken I was able to proceed to troubleshoot the specific issue of the portal misbehaving.
+
+The query showed that subscriptions were working and some users were  successfully browsing & running reports interactively.  Knowing that the whole instance wasn't broken I was able to proceed to troubleshoot the specific issue of the portal misbehaving.
 
 <!--more-->
 ## Looking into the portal issues
