@@ -11,7 +11,7 @@ When we create a funnel chart in Power BI we see the following:
 
 ![Not the funnel we expected](/assets/2017-09-10/FunnelWrong.png)
 
-That is technically correct (there are 4 applications in the New stage), but it isn't what we wanted (10 people applied and we hired 1 - which is not a 25% hire rate).  While we could change our data (typically modifying the query to include multiple columns - one for each stage), this one is fairly easy to solve with a few DAX calculations to return the inclusive number of applications by stage.
+That is technically correct (there are 3 applications in the New stage), but it isn't what we wanted (10 people applied and we hired 1 - which is not a 25% hire rate).  While we could change our data (typically modifying the query to include multiple columns - one for each stage), this one is fairly easy to solve with a few DAX calculations to return the inclusive number of applications by stage.
 
 <!--more-->
 
