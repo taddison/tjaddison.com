@@ -59,4 +59,4 @@ These can then be used when you want to compare those metrics between roles, loc
 
 If you're currently recruiting and you don't know what your funnel looks like I encourage you to read [how to recruit](http://randsinrepose.com/archives/how-to-recruit/) and then take another look at your funnel metrics (building them if needed).
 
-You can download an example workbook with the sample data and formulae [here](/assets/2017-09-10/FunnelSample.pbix).
+You can download an example Power BI desktop file with the sample data and formulae [here](/assets/2017-09-10/FunnelSample.pbix).
