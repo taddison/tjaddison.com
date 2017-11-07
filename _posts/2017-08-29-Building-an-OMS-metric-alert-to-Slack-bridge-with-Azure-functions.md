@@ -184,7 +184,7 @@ Perf
 
 ### Disk
 
-Alerts when a logical volume drops below a percentage threshold of free space.  Note we group by a custom value (Computer + | + InstanceName).
+Alerts when a logical volume drops below a percentage threshold of free space.  Note we group by a custom value (Computer + pipe + InstanceName).
 
 ```
 Infra - Disk [WARN] :: Server1 - C: :: 5%/5%/5% (min/avg/max Free Space %)
