@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Simplifying alert configuration in the OMS to Slack function app
-share-img: http://tjaddison.com/assets/2017-11-07/ExcelConfiguration.png
+share-img: http://tjaddison.com/assets/2017-11-08/ExcelConfiguration.png
 ---
 
 In the [last post](http://tjaddison.com/2017/08/29/Building-an-OMS-metric-alert-to-Slack-bridge-with-Azure-functions) we had a fairly complete (if limited) solution for the routing of arbitrary OMS metric alerts to Slack.  After having used this in production for a while I can report that:
