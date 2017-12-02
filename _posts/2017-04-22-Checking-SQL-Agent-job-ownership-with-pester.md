@@ -99,6 +99,6 @@ Note that the test we have coded for looks to ensure all jobs are owned by SA.  
 
 [sp_Blitz](https://www.brentozar.com/blitz/) One of the checks sp_Blitz currently implements is [Jobs Owned by User Accounts](https://www.brentozar.com/blitz/jobs-owned-by-user-accounts/).  If you're running this regularly it'll help catch the SQL Agent job issue, as well as many others.
 
-[ReportUnit](http://relevantcodes.com/reportunit/) Take the output of Invoke-Pester (which can be told to produce XML results files rather than dumping to the screen) and produce rather nice looking html reports.
+[Format-Pester](https://github.com/equelin/Format-Pester) Take the output of Invoke-Pester and produce self-contained HTML summary pages.
 
 [tSQLScheduler](https://github.com/taddison/tsqlScheduler) Github project used to create agent jobs automatically from data, ensuring they're always created as SA.
