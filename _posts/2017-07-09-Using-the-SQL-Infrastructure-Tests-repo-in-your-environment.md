@@ -2,6 +2,8 @@
 layout: post
 title: Using the SQL Infrastructure Tests repo in your environment
 ---
+>Update 2017-03-12: The [SQLChecks](https://github.com/taddison/SQLChecks) library builds on the ideas in this post and delivers an upgraded version of SQLInfrastructureTests.  [This blog post](/2017/12/03/Using-the-SQLChecks-library-for-SQL-Server-configuration-management) discusses how to use the library.
+
 The [SQL Infrastructure Tests](https://github.com/taddison/SQLInfrastructureTests) repo is generic and knows nothing about your infrastructure.  This makes it very easy to clone and use anywhere, but also means you need to provide some configuration information to actually make it useful in your environment.  Typically you want that environment specific information to also be in source control, you might be tempted to create a fork of the repo and make customisations for your environment.
 
 This nearly always ends in pain when you need to pull updates from the repository.  A better pattern is to create helper repositories (which would be privately version controlled).  These are where you make all your environment specific changes (your server names, etc.).  This has the added advantage of making it much harder to accidentally publish environment specific information to GitHub (say if you were to accidentally create a PR of your private fork…).
