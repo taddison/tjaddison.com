@@ -103,7 +103,7 @@ Right now there is only a single test file in the tests folder, which contains m
 
 In order to generate a report we're going to leverage [Format-Pester](https://github.com/equelin/Format-Pester) to run all of our tests, and output them into a self-contained HTML report.  This can then be saved for future reference or distributed via email/fileshare/etc.
 
-You'll need to install both [Format-Pester](https://github.com/equelin/Format-Pester) and [PSCribo](https://github.com/iainbrighton/PScribo) (used by Format-Pester) to execute this script.
+You'll need to install both [Format-Pester](https://github.com/equelin/Format-Pester) and [PScribo](https://github.com/iainbrighton/PScribo) (used by Format-Pester) to execute this script.
 
 **GenerateReport.ps1**
 ```powershell
@@ -139,8 +139,8 @@ Though it might seem we're missing out on the most important part of configurati
 
 For a SQL specific solution to the problem of configuration you can look at [Policy Based Management](https://docs.microsoft.com/en-us/sql/relational-databases/policy-based-management/administer-servers-by-using-policy-based-management).
 
-For something that supports the full set of operations (get, test, and set) I'd suggest starting with [DSC](https://docs.microsoft.com/en-us/powershell/dsc/overview).  There are some promising developments in [ReverseDSC](https://github.com/Microsoft/ReverseDSC) that might make getting started with DSC for SQL Server that much easier.
+For something that supports the full set of operations (get, test, and set) I'd suggest starting with [DSC](https://docs.microsoft.com/en-us/powershell/dsc/overview).  There are some promising developments in [ReverseDSC](https://github.com/Microsoft/ReverseDSC) that might make getting started with DSC for SQL Server much easier.
 
-[Puppet](https://puppet.com/docs/puppet/5.3/architecture.html) and [Chef](https://docs.chef.io/chef_overview.html) are also worth looking at - particularly the similarities and differences between their architectures (you'll notice Puppet, Chef and DSC have a lot of commonalities in the way they tackle some of the challenges).
+[Puppet](https://puppet.com/docs/puppet/5.3/architecture.html) and [Chef](https://docs.chef.io/chef_overview.html) are also worth looking at - particularly the similarities and differences between their architectures (though the implementations differ Puppet, Chef, and DSC have a lot in common).
 
-Finally, some good books on engineering operations (under which Configuration Management falls) are [Web Operations: Keeping the Data On Time](https://www.amazon.co.uk/Web-Operations-Keeping-Data-Time/dp/1449377440) and [Site Reliability Engineering](https://landing.google.com/sre/book.html).
+Finally, some books I'd recommend on engineering operations (including Configuration Management falls) are [Web Operations: Keeping the Data On Time](https://www.amazon.co.uk/Web-Operations-Keeping-Data-Time/dp/1449377440) and [Site Reliability Engineering](https://landing.google.com/sre/book.html).
