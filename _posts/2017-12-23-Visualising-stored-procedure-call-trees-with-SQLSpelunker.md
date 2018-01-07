@@ -7,7 +7,7 @@ Whether debugging a problem in an existing system, or planning changes to an exi
 
 If you've worked in any system where a lot of the logic ends up in the database, you'll probably be nodding your head and remembering 'that' procedure which looked pretty simple to start with, and after following a few dependencies you were suddenly deep down the rabbit hole... (the longest I've looked at so far branches out into ~100 procedures).
 
-Taking inspiration from [What's in the box? Validating SQL Scripts with Powershell](http://port1433.com/2017/12/04/whats-in-the-box-validating-sql-server-scripts-with-powershell/) and [Get Started with the ScriptDom](https://the.agilesql.club/blog/Ed-Elliott/2015-11-07/Get-Started-With-The-ScriptDom) I built [SQLSpelunker](https://www.github.com/taddison/SQLSpelunker) to allow you to quikcly go from a stored procedure name to a visual of the call tree for that procedure:
+Taking inspiration from [What's in the box? Validating SQL Scripts with Powershell](http://port1433.com/2017/12/04/whats-in-the-box-validating-sql-server-scripts-with-powershell/) and [Get Started with the ScriptDom](https://the.agilesql.club/blog/Ed-Elliott/2015-11-07/Get-Started-With-The-ScriptDom) I built [SQLSpelunker](https://www.github.com/taddison/SQLSpelunker) to allow you to quickly go from a stored procedure name to a visual of the call tree for that procedure:
 
 ```code
 c:\SQLSpelunker>dotnet run "server=localhost;initial catalog=tempdb;integrated security=SSPI" "exec dbo.ProcOne;"
