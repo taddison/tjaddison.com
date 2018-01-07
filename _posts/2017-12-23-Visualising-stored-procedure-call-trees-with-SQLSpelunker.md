@@ -205,9 +205,9 @@ The other feature which would be great is 'what calls this procedure?'.  Obvious
 
 Moving away from procedures only I'd love to extend this idea to report what tables/columns are being modified, though the way that gets visualised/interacted with is what I'm struggling with right now (is the question 'show me everything' or 'show me all procs in this chain which touch table foo/column bar?').
 
-## The longest proc I've seen so far
+## The longest/deepest proc I've seen so far
 
-Just for fun - curious to see what else is out there!
+Each line below represents a nested call to another proc all branching out from a single call.  Curious to know what else is out there :)
 
 ![Namespace configuration](/assets/2017-12-23/ARatherLongProcedure.png)
 
