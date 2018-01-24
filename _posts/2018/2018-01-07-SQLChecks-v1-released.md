@@ -9,7 +9,7 @@ After using SQLChecks to help tame our production instances for a few months, [v
 ![Pester Tests](/assets/2018/2018-01-07/PesterTests.png)
 
 Get the [latest version of SQLChecks from GitHub](https://github.com/taddison/SQLChecks).
-
+<!--more-->
 The documentation in some cases includes suggestions for config values, and explanations on why you should care about testing for that particular value.  These values and recommendations are drawn from a combination official sources (e.g. [SQLRAP](https://blogs.technet.microsoft.com/mspfe/2013/01/08/10-top-sql-server-issues-uncovered-by-the-sql-server-risk-assessment-program/)), books & blogs, as well as hard-won experience.
 
 The goal with these tests is not just to identify areas where you're not meeting policy today, but to ensure that over time you don't have any accidental regressions (e.g. new databases, people changing configuration settings for testing and not putting them back...)

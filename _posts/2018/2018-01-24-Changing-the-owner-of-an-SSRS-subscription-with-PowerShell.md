@@ -25,7 +25,7 @@ $subsToMove | Select-Object Path, Report | Format-Table
 >You'll need to update the Uri in the above example if your report server is anywhere other than localhost.
 
 The script will also output the list of subscriptions that have been modified.
-
+<!--more-->
 Since late 2016 there has been a [PowerShell module](https://www.powershellgallery.com/packages/ReportingServicesTools) available that has started to provide a comprehensive set of SSRS administration functions, though at the time of writing it has the same items-then-subscriptions pattern which makes it much slower than the above script.
 
 Finally, it's worth noting that if you only manage a small number of instances (or perhaps you're just more comfortable in T-SQL) there is [a simple script](https://blogs.msdn.microsoft.com/miah/2008/07/10/tip-change-the-owner-of-sql-reporting-services-subscription/) that has been around since at least 2008 that lets you do this.
