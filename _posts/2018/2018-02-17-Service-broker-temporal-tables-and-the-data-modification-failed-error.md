@@ -4,19 +4,19 @@ title: Service Broker, Temporal Tables, and the 'Data modification failed' error
 share-img: http://tjaddison.com/assets/2018/2018-02-17/ErrorSlug.png
 ---
 
-[Temporal tables](https://docs.microsoft.com/en-us/sql/relational-databases/tables/temporal-tables) are a fantastic feature which we've enjoyed rolling out to replace some hand-rolled logging.  Adding system versioning to a table is has been mostly straightforward, though last week one of my colleagues saw some really odd behaviour that took the team a while to understand.  Now we've understood the problem we're able to reproduce it 100% of the time (and subsequently come up with a workaround), though it definitely had us scratching our heads for a while - thanks for that Ola!
+[Temporal tables](https://docs.microsoft.com/en-us/sql/relational-databases/tables/temporal-tables) are a fantastic feature which we've enjoyed rolling out to replace some hand-rolled logging.  Adding system versioning to a table has been mostly straightforward, though last week one of my colleagues saw some really odd behaviour that took the team a while to debug.  Now we've understood the problem we're able to reproduce it 100% of the time (and subsequently come up with a workaround), though it definitely had us scratching our heads for a while - thanks for a super-interesting problem Ola!
 
-We've previously known that highly concurrent modifications to a single row can end up raising a data-modification exception, though we'd always assumed it required concurrent activity on the row in question.  What we learned is that it is concurrent transactions modifying the same row that is key.  It all started with an error message we were familiar with from previous concurrency troubleshooting:
+We've previously had experience with highly concurrent modifications to a single row causing a data-modification error, and in every case we'd end up tracking down a bug which was causing unnecessary concurrent modifications.
 
 ```
 Msg 13535, Level 16, State 0, Procedure HandleProcessPayment, Line 20 [Batch Start Line 0]
 Data modification failed on system-versioned table 'TemporalBroker.dbo.Payment' because transaction time was earlier than period start time for affected records.
 ```
 
-What had us really confused was that in this case we didn't have any concurrency and the insert/update activity on a single row was definitely not overlapping (confirmed with exhaustive XEvent-ing!).
+What had us really confused this time was that this was a very low-volume process, and we didn't observe any concurrency around the insert/update activity for the single row (confirmed with exhaustive XEvent-ing!).
 
 ## The Setup
-One of our applications uses service broker fairly heavily, the (heavily!) simplified flow looks something like this:
+One of our applications uses service broker fairly heavily, the simplified flow looks something like this:
 
 - Web app inserts a payment record in state 'ready to pay'
 - Web app queues a message on service broker with the instruction to pay
@@ -26,9 +26,9 @@ One of our applications uses service broker fairly heavily, the (heavily!) simpl
 - Payments app updates the status of the payment to 'requested'
 - Payments app commits the transaction
 
-After implementing system versioning on the table we started to see errors at the step which updated the payment.
+After implementing system versioning on the table we started to see errors on the step which updated the payment.
 
-The transactional flow (grouped by time T, and session S - in this case session 1 is the payments app, session 2 is the web app) looks something like this:
+The transactional flow (shown by time T, and session S - in this case session 1 is the payments app, session 2 is the web app) looks something like this:
 
 - T1, S1 - Begin Tran
 - T2, S1 - [Waitfor receive](https://docs.microsoft.com/en-us/sql/t-sql/statements/receive-transact-sql)...
@@ -45,8 +45,10 @@ As well as in the [ISO technical report on SQL Support for Time-Related Informat
 
 >An UPDATE statement on a system-versioned table first inserts a copy of the old row with its system-time period end time set to the transaction timestamp, indicating that the row ceased to be current as of the transaction timestamp. It then updates the row while changing its system-period start time to the transaction timestamp, indicating that the updated row to be the current system row as of the transaction timestamp.
 
+In all of our previous troubleshooting we were dealing with very short (typically implicit) transactions, and so we were incorrectly thinking about concurrency at the statement level, rather than the transaction level.
+
 ## Repro
-If you'd like to try this out [this script](/assets/2018/2018-02-17/createobjects.sql) will create the database and all objects required.
+>If you'd like to try this repro out yourself you can download [this script](/assets/2018/2018-02-17/createobjects.sql) to create the database and all objects required.
 
 The two procedures we'll be looking at are the one which inserts the payment request:
 
@@ -78,7 +80,7 @@ begin
 end
 ```
 
-And the script which processes the payment:
+And the procedure which processes the payment:
 
 ```sql
 create or alter procedure dbo.HandleProcessPayment
@@ -108,9 +110,9 @@ begin
 end
 ```
 
-In this example the script does all the work, in the actual environment there was a single transaction and multiple commands executed (as well as the third-party calls to actually initiate a payment!).
+In this trivialised example the procedure does all the work, in the actual environment there was a single transaction and multiple commands executed (as well as the third-party calls to actually initiate a payment!).
 
-To reproduce the error, execute dbo.HandleProcessPayment in one session (which will wait up to 10 seconds for a message to arrive), and then run dbo.RequestPayment in another session - you'll see the HandleProcessPayment procedure error out.
+To reproduce the error, execute `dbo.HandleProcessPayment` in one session (which will wait up to 10 seconds for a message to arrive), and then run `dbo.RequestPayment` in another session - you'll see the HandleProcessPayment procedure error out.
 
 ## Workarounds
 
