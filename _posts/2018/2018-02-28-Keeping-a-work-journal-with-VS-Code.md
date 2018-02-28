@@ -3,7 +3,7 @@ layout: post
 title: Keeping a work journal with VS Code
 share-img: http://tjaddison.com/assets/2018/2018-02-28/JournalSample.png
 ---
-I've recently started to keep a [work journal](https://peterlyons.com/leveling-up#your-work-journal), and aside from being an incredibly useful document, it also gave me an excuse to learn a lot more about VS Code.  After publishing an extension for VS Code yesterday, I'm now declaring my work journal flow done (at least for now...), and the rest of this post will walk you through my setup.
+I've recently started to keep a [work journal](https://peterlyons.com/leveling-up#your-work-journal), and aside from being an incredibly useful document, it also gave me an excuse to learn a lot more about [VS Code](https://code.visualstudio.com/).  After publishing an extension for VS Code yesterday, I'm now declaring my work journal flow done (at least for now...), and the rest of this post will walk you through my setup.
 
 ![Sample Journal](/assets/2018/2018-02-28/JournalSample.png)
 *A sample journal entry*
@@ -16,11 +16,11 @@ In setting up a workflow there were a few requirements I had:
 - Minimum possible friction to add something to the journal
 - Works in VS Code (my go-to editor for anything that doesn't merit VS2017 or SSMS)
 
-The first two points boil down to sync, and crucially that sync should contain not only the journal but also the settings used to make the third point work on every machine.
+The first two points boil down to sync, and crucially that sync should contain not only the journal itself but also the settings used to help achieve the third point (minimum friction edits) on every machine.
 
 ## Keeping things in sync
 
-The journal itself lives in a repository in [Visual Studio Team Services](https://www.visualstudio.com/team-services/), in which it is free to host unlimited repos for up to 5 users.  Having access to a repo either by SSH (which I use on most permanent machines) or via a Microsoft login (which allows for quick in-browser edits in a pinch) is helpful.  I'd have probably gone with GitHub if I had the a plan which supported private repos.
+The journal itself lives in a repository in [Visual Studio Team Services](https://www.visualstudio.com/team-services/), in which it is free to host unlimited repos for up to 5 users.  Having access to a repo either by SSH (which I use on most permanent machines) or via a Microsoft login (which allows for quick in-browser edits in a pinch) is helpful.  I'd have probably gone with GitHub if I had a plan which supported private repos.
 
 In order to keep the VS Code configuration in sync I use the [Settings Sync](https://marketplace.visualstudio.com/items?itemName=Shan.code-settings-sync) extension, which uses a private GitHub gist (which is free!) to sync settings between instances of VS Code.  With this configured all extensions/user settings/keybindings/etc., are synced between all instances of VS Code.  It's *awesome*.
 
