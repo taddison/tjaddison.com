@@ -114,13 +114,16 @@ You can also use [Niko's](http://www.nikoport.com/) [Columnstore Indexes Script 
 The good news is fixing this is easy:
 
 ```sql
-alter index CCS_Telemetry on dbo.Telemetry reorganize with (compress_all_row_groups = on);
+alter index CCS_Telemetry on dbo.Telemetry reorganize
+with (compress_all_row_groups = on);
 ```
 
 Although the command is easy, the impact to your system if you have a lot of open rowgroups might not be!  You might instead opt to only compress a subset of partitions (much more typical if you have active partitions accepting inserts):
 
 ```sql
-alter index CCS_Telemetry on dbo.Telemetry reorganize partition = (1,2,3) with (compress_all_row_groups = on);
+alter index CCS_Telemetry on dbo.Telemetry reorganize
+partition = (1,2,3) 
+with (compress_all_row_groups = on);
 ```
 
 The final clause (`compress_all_row_groups`) refers to the row groups in the partitions, not all row groups in the table.
