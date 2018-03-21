@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Pattern: SQL Server as a shared cache for expensive stored procedures
+title: Pattern - SQL Server as a shared cache for expensive stored procedures
 share-img: http://tjaddison.com/assets/2018/2018-03-21/CacheControl.png
 ---
 The following scaling rules will take you a long way if you are supporting an environment with a SQL Server datastore:
