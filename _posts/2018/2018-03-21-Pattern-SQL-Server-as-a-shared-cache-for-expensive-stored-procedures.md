@@ -5,7 +5,7 @@ share-img: http://tjaddison.com/assets/2018/2018-03-21/CacheControl.png
 ---
 The following scaling rules will take you a long way if you are supporting an environment with a SQL Server datastore:
 
-- Cache as much as you can in the application tiers
+- Cache as much as you can in the application tier
 - Offload as much computation into the application as possible
 - Minimise the work high-volume queries have to do
 - Limit the number of transactions you do, and the work each transaction does
@@ -14,11 +14,11 @@ Knowing when to ignore (or even break) these rules is what keeps the job interes
 
 The rest of the post will walk through a generic pattern to cache stored procedure results that vary by parameter, including the logic needed to expire, cleanup, and evaluate the cache.  This solution has been battle tested in production with a fairly expensive procedure called concurrently from multiple application nodes (for dozens of different parameter combinations).
 
-> The environment that motivated this work already aggressively caches results in the application tiers - the specific motivation to cache the results in SQL came from the number of application nodes increasing.  Building a shared cache service [or introducing something like Redis/Memcached] is a non-trivial engineering project, and the SQL CPU pressure was acute.  Other options (e.g. incremental cache updates/aggregation in the application tier) were also judged to be significant projects.
+> The environment that motivated this work already aggressively caches results in the application tier - the specific motivation to cache the results in SQL came from the number of application nodes increasing.  Building a shared cache service [or introducing something like Redis/Memcached] is a non-trivial engineering project, and the SQL CPU pressure this proc caused was significant.  Other options (e.g. incremental cache updates/aggregation in the application tier) were also judged to be significant projects (or at least, more significant than caching it in the database!).
 
 ![Cache Control](/assets/2018/2018-03-21/CacheControl.png)
 
-If you want to see the full example, you can check the [complete example on GitHub](https://github.com/taddison/DBCacheExample).  Before deploying into production I strongly suggest reading through the entire post for caveats and tradeoffs.
+If you want to see the full example, you can check the [complete source on GitHub](https://github.com/taddison/DBCacheExample).  Before deploying into production I strongly suggest reading through the entire post for caveats and tradeoffs.
 
 <!--more-->
 
@@ -70,7 +70,8 @@ create table DBCache.MasterControl
 (
 	CachedEntity varchar(255) not null
 	,IsEnabled bit not null
-	,constraint PK_MasterControl primary key clustered (CachedEntity)
+	,constraint PK_MasterControl 
+		primary key clustered (CachedEntity)
 );
 go
 create sequence DBCache.SEQ_Control as int
@@ -85,8 +86,10 @@ create table DBCache.dbo_GetTopSellingProducts_Control
 	,Param_CategoryId int not null
 	,UseCount int null
 	,Id int not null
-	,constraint PK_dbo_GetTopSellingProducts_Control primary key clustered (Id)
-	,index IX_dbo_GetTopSellingProducts_Control_ExpiryParams nonclustered (Param_CategoryId, ExpiryDateTime)
+	,constraint PK_dbo_GetTopSellingProducts_Control 
+		primary key clustered (Id)
+	,index IX_dbo_GetTopSellingProducts_Control_ExpiryParams 
+		nonclustered (Param_CategoryId, ExpiryDateTime)
 );
 go
 create table DBCache.dbo_GetTopSellingProducts_Results
@@ -94,14 +97,15 @@ create table DBCache.dbo_GetTopSellingProducts_Results
 	ControlId int not null
 	,ProductId int not null
 	,TotalSalePrice money not null
-	,index CIX_dbo_GetTopSellingProducts_Results clustered (ControlId)
+	,index CIX_dbo_GetTopSellingProducts_Results 
+		clustered (ControlId)
 );
 go
 ```
 
 Each stored procedure that needs to be cached has a control/result table that are unique to that stored procedure.  Specifically, we capture all parameters in the control table, and all output columns in the results table.  The control table must be indexed based on both the parameters of the procedure and the expiry date to support efficient lookups (answering the question 'is there a valid cached result for my parameter set?').
 
-> Ensure the types and nullability of these columns match what the stored procedure already uses/produces.  A great way to get the type information is to use [sp_describe_first_result_set](https://docs.microsoft.com/en-us/sql/relational-databases/system-stored-procedures/sp-describe-first-result-set-transact-sql)
+> Ensure the types and nullability of these columns match what the stored procedure already uses/produces.  A great way to get the type information of the result set is to use [sp_describe_first_result_set](https://docs.microsoft.com/en-us/sql/relational-databases/system-stored-procedures/sp-describe-first-result-set-transact-sql)
 
 ### Stored Procedure
 
@@ -162,8 +166,6 @@ begin
 		return;
 	end
 
-	/* No cached valued available or DBCache disabled, we are going to need to generate the results */
-
 	select	top(20)
 			p.ProductId
 			,sum(s.TotalSalePrice) as TotalSalePrice
@@ -177,7 +179,6 @@ begin
 	group by p.ProductId
 	order by sum(s.TotalSalePrice) desc;
 
-	/* If this is a cache miss and DBCache is enabled, populate the cache */
 	if @cacheControlId is null and @DB_CACHE_STATUS = 1
 	begin
 	begin try
@@ -212,7 +213,6 @@ begin
 		)
 	end try
 	begin catch
-		/* Regardless of the error we've hit, set @cacheControlId to NULL to force results to be served from #results rather than cache */
 		set @cacheControlId = null;
 	end catch
 	end
@@ -298,7 +298,7 @@ go
 ```
 
 ## Tradeoffs and design decisions
-Adding caching in the database is fairly straightforward in theory - we store a copy of the results somewhere and re-use them if they are available (our prototypes looked very similar to the approach outlined by [this post from 2013](https://www.brentozar.com/archive/2013/12/how-to-cache-stored-procedure-results/)).  Some of the reason's that the caching solution deviated from the simple approach are documented below.
+Adding caching in the database is fairly straightforward in theory - we store a copy of the results somewhere and re-use them if they are available (our early prototypes looked very similar to the approach outlined by [this post from 2013](https://www.brentozar.com/archive/2013/12/how-to-cache-stored-procedure-results/)).  Some of the reason's that the caching solution deviated from the simple approach are documented below.
 
 > Some of these are specific to the environment the solution is being deployed in, and others are driven by the specific workload we were optimising for.  Evaluate your own needs carefully before deploying some or all of this solution into production.
 
