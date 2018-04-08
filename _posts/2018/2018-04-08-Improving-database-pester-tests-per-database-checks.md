@@ -38,10 +38,10 @@ Describe "Data file space used" -Tag MaxDataFileSize {
 }
 ```
 
-In order to move the function to per-database checks:
+In order to move the test to report per-database:
 - The `Get-DatabasesOverMaxDataFileSpaceUsed` function is replaced with a new one that no longer iterates over all databases in the SQL query, and instead executes against a single database, returning all files that are larger than the space used configuration value
 - A list of database to run the check against is obtained by using `Get-DatabasesToCheck`, ignoring any replica databases
-- A new test is executed per-database
+- A new test (It) is executed for each database - note the database name is updated in the hashtable each iteration
 
 The formatting of the Context/It block was also changed to support easier consumption in the [dbachecks](https://github.com/sqlcollaborative/dbachecks) Power BI dashboard (which expects instance name to be in specific places).
 
