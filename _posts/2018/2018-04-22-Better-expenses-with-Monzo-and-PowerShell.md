@@ -3,7 +3,7 @@ layout: post
 title: Better expenses with Monzo and PowerShell
 share-img: http://tjaddison.com/assets/2018/2018-04-22/Export.png
 ---
-While making submitting expenses _fun_ is probably impossible, we can leverage Monzo and Powershell to start automating away some of the manual steps involved.  In my specific case I need to submit monthly expenses with receipt support and categorise each expense.  Combine Monzo's tagging, image support, and CSV export with PowerShell's ability to...well do pretty much anything, and we have a workable solution!
+While making submitting expenses _fun_ is probably impossible, we can leverage Monzo and PowerShell to start automating away some of the manual steps involved.  In my specific case I need to submit monthly expenses with receipt support and categorise each expense.  Combine Monzo's tagging, image support, and CSV export with PowerShell's ability to...well do pretty much anything, and we have a workable solution!
 
 Assuming I've correctly [tagged all my transactions](https://monzo.com/blog/2018/04/12/transaction-tags/) with the #expense tag I can then take the monthly export (available from the spending tab) and get my expense submission mostly prepared with a single PowerShell command:
 
