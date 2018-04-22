@@ -21,16 +21,18 @@ This creates a CSV that contains transactions tagged with #expense in the Monzo 
 ![Expense Folder](/assets/2018/2018-04-22/Export.png)
 
 A little copy-paste later and I'm done.  Read on for details on how it works, and where you can customise the data you return.  If you want to use this on your own data (or try it out on some sample data) you can get everything you need in this [example GitHub repo](https://github.com/taddison/blog-monzo-expenses/blob/master/Expenses.ps1).
-<!--more-->
-## How the script works
-Below are a few example lines from a Monzo export (somewhat fabricated :)).
 
-Once you've got the CSV export downloaded you run the script in order to:
+<!--more-->
+
+## How the script works
+
+The script:
+
 - Get's all the entries in the Monzo CSV export
 - Filters out anything that doesn't contain the tag #expense
 - Downloads the first image for each transaction (if one exists), and renames it to match the expense line (1,2,3...)
 - Maps the Monzo category to an internal category
-- Writes the expense line to a CSV, including ID, Date, Currency, Amount, and Category
+- Writes the expense line to a CSV, including ID, Date, Currency, Amount, Category, and if a receipt is present
 
 Let's go through some of those steps in more detail.  First of all - importing the CSV and filtering.  A tag in Monzo is stored in the notes field.
 
