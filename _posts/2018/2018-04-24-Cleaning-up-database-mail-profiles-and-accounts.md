@@ -6,7 +6,7 @@ share-img: http://tjaddison.com/assets/2018/2018-04-24/mailboxes.jpg
 
 You know that dev server you've got lying around that has about half a dozen database mail profiles on?  Maybe one account for every provider you've tested?  Or maybe it's even a production server that has had its profile faithfully updated to a new account each time your SMTP server moves but never had the old ones cleared out?
 
-We've recently moved all of our servers to use SendGrid SMTP for sending out mail (see [this gist](https://gist.github.com/taddison/bad62ea292a395b1e86f967dd265f04f) for a script - just plug in your SendGrid [API key](https://sendgrid.com/docs/Classroom/Send/How_Emails_Are_Sent/api_keys.html)).  After ensuring each server had a SendGrid profile as the default I decided to get rid of everything else, and leave all of our servers (including the dev server that had 50 profiles that were never used), pristine.
+After recently moving all of our servers to use SendGrid SMTP for sending out database mail I decided to perform some long overdue spring cleaning.  In our case that included a couple of dev servers, as well as a production server from which you could divine the history of the company from the various database mail profiles and accounts it had.
 
 >Your servers might have a legitimate reason to contain multiple mail profiles/accounts, so only run the below script on a server if you are sure you want to remove every account/profile except the default.
 
@@ -39,3 +39,5 @@ with cte as (
 )
 delete from cte;
 ```
+
+For an example script which configures the default profile and account to use a SendGrid SMTP profile, see [this gist](https://gist.github.com/taddison/bad62ea292a395b1e86f967dd265f04f).  Plug in in your SendGrid [API key](https://sendgrid.com/docs/Classroom/Send/How_Emails_Are_Sent/api_keys.html)) and you're good to go.
