@@ -51,7 +51,6 @@ Login-AzureRmAccount # You'll be prompted to login
 Select-AzureRmSubscription -SubscriptionName $subscriptionName
 
 $sp = New-AzureRmADServicePrincipal -DisplayName $appDisplayName -Password $appPassword
-New-AzureRmRoleAssignment -ServicePrincipalName $sp.ApplicationId -RoleDefinitionName Contributor
 New-AzureRmRoleAssignment -ServicePrincipalName $sp.ApplicationId -RoleDefinitionName Owner -ResourceGroupName $resourceGroupName
 
 $sp | Select DisplayName, ApplicationId # You'll need the ApplicationId later
