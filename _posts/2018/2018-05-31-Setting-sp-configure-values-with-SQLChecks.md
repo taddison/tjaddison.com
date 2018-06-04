@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Setting sp_configure values with SQLChecks
-share-img: http://tjaddison.com/assets/2018/2018-05-31/TODO.jpg
+share-img: http://tjaddison.com/assets/2018/2018-05-31/SetSpConfigFunction.jpg
 ---
 
 As of v1.0 SQLChecks now contains a command which allows you to take a file that documents a server configuration (specifically sp_configure values) and apply that configuration to a server.  The configuration file is the same one used by Pester tests ([perhaps in combination with something like dbachecks](https://github.com/taddison/dbachecks-wrapper)), which means you now have a mechanism to document, test, and set your server's configuration.
@@ -12,9 +12,7 @@ In order to apply the configuration to a single server you would run the followi
   Read-SqlChecksConfig "c:\configs\localhost.config.json" | Set-SpConfig -Verbose
 ```
 
-Assuming there were a few changes to make, this gives you the following output:
-
-###TODO: PICTURE###
+Running in verbose means that it'll output progress as it changes a value, as well as a summary as it finishes (x/y config values updated).
 
 >Note the command compares the configured value against the expected value - if the configured value is correct but the runtime value is wrong then this will neither fail the Pester tests, nor update the value when using `Set-SpConfig`.
 
