@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Setting sp_configure values with SQLChecks
-share-img: http://tjaddison.com/assets/2018/2018-05-31/SetSpConfigFunction.jpg
+share-img: http://tjaddison.com/assets/2018/2018-05-31/SetSpConfigFunction.png
 ---
 
 As of v1.0 SQLChecks now contains a command which allows you to take a file that documents a server configuration (specifically sp_configure values) and apply that configuration to a server.  The configuration file is the same one used by Pester tests ([perhaps in combination with something like dbachecks](https://github.com/taddison/dbachecks-wrapper)), which means you now have a mechanism to document, test, and set your server's configuration.
