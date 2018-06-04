@@ -9,7 +9,8 @@ As of v1.0 SQLChecks now contains a command which allows you to take a file that
 In order to apply the configuration to a single server you would run the following PowerShell (note that SQLChecks configuration files contain the instance name, which is why we don't have to specify a server):
 
 ```powershell
-  Read-SqlChecksConfig "c:\configs\localhost.config.json" | Set-SpConfig -Verbose
+  Read-SqlChecksConfig "c:\configs\localhost.config.json" `
+  | Set-SpConfig -Verbose
 ```
 
 Running in verbose means that it'll output progress as it changes a value, as well as a summary as it finishes (x/y config values updated).
@@ -21,7 +22,9 @@ Running in verbose means that it'll output progress as it changes a value, as we
 You can easily apply changes to a whole estate of servers by using the below script, which will find every config file in a folder (or subfolder) and apply the `sp_configure` values to the servers.
 
 ```powershell
-Get-ChildItem -Filter *.config.json -Recurse | Read-SqlChecksConfig | Set-SpConfig -Verbose
+Get-ChildItem -Filter *.config.json -Recurse `
+  | Read-SqlChecksConfig `
+  | Set-SpConfig -Verbose
 ```
 
 Under the hood this command leverages the [dbatools](https://dbatools.io/) library, specifically the commands [Get-DbaSpConfigure](https://dbatools.io/functions/get-dbaspconfigure/) and [Set-DbaSpConfigure](https://dbatools.io/functions/set-dbaspconfigure/).  These commands both end up creating SMO objects which are pretty costly in terms of time compared to a hand-rolled T-SQL solution to check/set these values.
