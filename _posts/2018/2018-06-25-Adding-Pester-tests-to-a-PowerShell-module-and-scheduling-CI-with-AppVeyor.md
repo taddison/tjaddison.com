@@ -15,7 +15,7 @@ While some of breaks were definitely edge cases (and I don't think I have the th
 
 And once we're done a quick glance at our readme will show:
 
-![SQLChecks with badges](/assets/2018/2018-06-25/SQLChecksGitHubBadges.png)
+![SQLChecks with badges](/assets/2018/2018-06-25/SQLChecksGithubBadges.png)
 
 <!--more-->
 
