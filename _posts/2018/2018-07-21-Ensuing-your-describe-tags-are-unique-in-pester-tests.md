@@ -4,17 +4,13 @@ title: Ensuring your Describe Tags are unique in Pester tests
 share-img: https://tjaddison.com/assets/2018/2018-07-21/DescribeTagsAppVeyor.png
 ---
 
-The name of each test in SQLChecks is used as both the setting name in the configuration files, and to tag the Describe block.  After seeing the benefit of fine-grained control over test execution (from Claudio Silva's post [dbachecks - a different approach...]) this method of test invocation became the preferred way to leverage the SQLChecks library:
+The name of each test in [SQLChecks] is used as both the setting name in the configuration files, and to tag the Describe block.  After seeing the benefit of fine-grained control over test execution (from Claudio Silva's post [dbachecks - a different approach...]) this method of test invocation became the preferred way to leverage the SQLChecks library:
 
 ```powershell
-$sqlCheckConfig = Read-SqlChecksConfig -Path $sqlChecksConfigPath
-foreach($check in $sqlCheckConfig | `
-          Get-Member -Type NoteProperty | `
-          Where-Object { $_.Name -ne "ServerInstance"} | `
-          Select-Object -ExpandProperty Name) {
-
+$config = Read-SqlChecksConfig -Path $sqlChecksConfigPath
+foreach($check in (Get-SqlChecksFromConfig $config)) {
   # Note we invoke by -Tag $check - a test with no tag will never get invoked
-  Invoke-SqlChecks -Config $sqlCheckConfig -Tag $check
+  Invoke-SqlChecks -Config $config -Tag $check
 }
 ```
 
@@ -162,6 +158,7 @@ Which looks something like this:
 
 ![Every test has a tag](/assets/2018/2018-07-21/EveryTestHasATag.png)
 
+[SQLChecks]: https://github.com/taddison/SQLChecks
 [dbachecks - a different approach...]: https://claudioessilva.eu/2018/02/22/dbachecks-a-different-approach-for-an-in-progress-and-incremental-validation/
 [tag uniqueness test on GitHub]: https://github.com/taddison/SQLChecks/blob/master/tests/SQLChecks.Module.tests.ps1
 [Using the AST in Pester for dbachecks]: https://sqldbawithabeard.com/2018/01/15/using-the-ast-in-pester-for-dbachecks/
