@@ -4,7 +4,7 @@ title: Ensuring your Describe Tags are unique in Pester tests
 share-img: https://tjaddison.com/assets/2018/2018-07-21/DescribeTagsAppVeyor.png
 ---
 
-The name of each test in SQLChecks is used as both the setting name in the configuration files, and to tag the Describe block.  After seeing the benefit of fine-grained control over test execution (from in Claudio Silva's post [dbachecks - a different approach...]) this method of test invocation became the preferred way to leverage the SQLChecks library:
+The name of each test in SQLChecks is used as both the setting name in the configuration files, and to tag the Describe block.  After seeing the benefit of fine-grained control over test execution (from Claudio Silva's post [dbachecks - a different approach...]) this method of test invocation became the preferred way to leverage the SQLChecks library:
 
 ```powershell
 $sqlCheckConfig = Read-SqlChecksConfig -Path $sqlChecksConfigPath
@@ -18,7 +18,7 @@ foreach($check in $sqlCheckConfig | `
 }
 ```
 
-There isn't yet a convention for how to name a test, and we've already had some tests built with pretty-similar sounding names - it is only a matter of time before we get a duplicate.  To prevent duplicate tests accidentally getting checked in, I recently added a test that parses the Pester test files and ensures that each tag is not just unique within the file, but globally unique within SQLChecks.
+There isn't yet a convention for how to name a test, and we've already had some tests built with similar sounding names - it is only a matter of time before we get a duplicate.  To prevent duplicate tests accidentally getting checked in (and causing unusual/broken behaviour for consumers), I recently added a test that parses the test files and ensures that each tag is not only unique within the file, but globally within SQLChecks.
 
 ![Describe tags test on AppVeyor](/assets/2018/2018-07-21/DescribeTagsAppVeyor.png)
 
@@ -38,15 +38,17 @@ At a high level the test:
 - Records the tag (if it exists) in an array of all tags
 - Loops through the array of tags and checks if any of them has a count greater than 1
 
-This gives the Pester test a fairly useful output (`Tag X is a duplicate`) rather than (`There are duplicate tags`).  If your tests are going to fail you want them to be maximally helpful in debugging the failure.
+> Looping through the array and testing each tag give the test a fairly useful output (`Tag X is a duplicate`) rather than something generic and unhelpful (`There are duplicate tags`).  If your tests are going to fail you want them to be maximally helpful in debugging the failure.
 
-Most of the requirements (get all the files, loop through the array) are fairly forward PowerShell - if we take out the parsing code the test looks like this:
+Most of the requirements (get all the files, loop through the array) are fairly straightforward PowerShell - if we take out the parsing code the test looks like this:
 
 ```powershell
 Describe "Module test Describe tags are unique" {
   $tags = @()
 
-  Get-ChildItem -Filter *.tests.ps1 -Path $PSScriptRoot\..\src\SQLChecks\Tests | Get-Content -Raw | ForEach-Object {
+  Get-ChildItem -Filter *.tests.ps1 -Path $PSScriptRoot\..\src\SQLChecks\Tests | `
+    Get-Content -Raw | `
+    ForEach-Object {
       #TODO: Add the tag to the array
   }
 
@@ -60,23 +62,27 @@ Describe "Module test Describe tags are unique" {
 
 ## Parsing PowerShell
 
-Luckily for us parsing PowerShell is a well-trodden path and we have some excellent tools available, with the [Parser][Parser class on MSFT docs] allowing us to take a string and deconstruct it into an [Abstract Syntax Tree] (AST).  The tree structure turns our script into an incredibly rich object graph that we can interact with and query, and is one of the first steps taken by a compiler to take a script (in any language) and execute it.
+Parsing PowerShell is a well-trodden path and we have some excellent tools available, with the [Parser class][Parser class on MSFT docs] allowing us to take a string and turn it into an [Abstract Syntax Tree] (AST).  The tree structure gives us an incredibly rich object graph that we can interact with and query (so rather than writing a regex to find all Describe blocks, we can ask the AST to find all the Describe commands).
 
-We build the AST by piping the content from our files to it (this would sit on the inside of the `Get-Content | ForEachObject {` block)
+We build the AST by passing the content from our files to the ParseInput command (this is on the inside of the `Get-Content -Raw | ForEachObject {` block)
 
 ```powershell
-$ast = [Management.Automation.Language.Parser]::ParseInput($_, [ref]$null, [ref]$null)
+$ast = [Management.Automation.Language.Parser]::ParseInput(
+    $_,
+    [ref]$null,
+    [ref]$null
+)
 ```
 
->The `[ref]$null`s are used as the `ParseInput` has two additional mandatory parameters - in our case we don't care about saving the tokens or errors (see the [ParseInput documentation] for more details)
+>The two `[ref]$null`s are needed to satisfy the required parameters of `ParseInput` - in this case we don't care about capturing the tokens or any errors returned (see the [ParseInput documentation] for more details)
 
 Once the AST is built we can then run a query to find all nodes that satisfy a set of predicates.  In our case we want to find:
 
 - Every Describe command (Remember, Describe is a PowerShell function!)
 - Where there is a second parameter (we'll assume the first parameter is the description, e.g. `Describe "Some Test"`)
-- Where that second parameter is called Tag
+- Where that second parameter name is Tag
 
-And once we have found every Describe command that satisfies those predicates, we want to take the fourth element (called the `CommandElement`) which will be the Tag value.  Translated into PowerShell our query looks like this (remember the find result will produce multiple results, so we have to harvest the tag from each of them):
+And once we have found every Describe command that satisfies those predicates, we want to take the fourth element (called the `CommandElement`) which will be the Tag parameter's value.  Translated into PowerShell our query looks like this (remember the `FindAll` method can produce multiple results, so we have to extract the tag from each one):
 
 ```powershell
 $ast.FindAll({
@@ -92,7 +98,7 @@ $ast.FindAll({
 
 The FindAll functions takes a predicate function which should return `$true` if the node matches.  The first line of our predicate (`...-is [System...`) limits our search to commands only (not comments, blocks, etc.).
 
-> You'll note we don't check there is a fourth parameter - this is invalid syntax (missing parameter value) and that sounds like another test that could be written.
+> You'll note we don't check there is a fourth command element - this would be invalid syntax (missing parameter value/no test block) and that sounds like another test we could write.
 
 ## The complete test
 
@@ -121,13 +127,15 @@ Describe "Module test Describe tags are unique" {
 }
 ```
 
-If you've not worked with an AST or parser before (or you have but not in PowerShell) some of this might look a little intimidating (it certainly took me a while to grok it), but I'd encourage you to persevere as the idea is incredibly powerful.  Also, it's pretty cool to have Pester tests for your Pester tests.
+If you've not worked with an AST or parser before (or you have but not in PowerShell) some of this might look a little intimidating (it took me a while to grok it), but I'd encourage you to persevere as the idea.pattern is incredibly powerful.
+
+> It's pretty cool to write Pester tests for your Pester tests.
 
 ![I heard your like Pester tests](/assets/2018/2018-07-21/YoDawg.jpg)
 
 ## Adding more tests
 
-Once we have the framework for parsing a test we can then add additional tests fairly easy - the below is a full example that will check every test (`Describe` block) has a tag parameter.  The only changes are we perform our checks per-describe block (inside a context so you can easily find the failure), and we've moved the tests for parameter/parameter value out of the `FindAll` and onto the other side of a `Should` test.
+Once we have the pattern for parsing and inspecting a test we can add additional tests fairly easily - the below is a full example that will check if every test (`Describe` block) has a `Tag` parameter.  The main difference to the previous test is we perform our checks per-describe (inside a context that specifies the file, so you can easily track down any failures).  We've also moved the tests for parameter/parameter value out of the `FindAll` and onto the other side of a `Should` test (because we want to find _all_ the describe blocks and check if they're well formed afterwards).
 
 ```powershell
 Describe "Every test has a tag" {
