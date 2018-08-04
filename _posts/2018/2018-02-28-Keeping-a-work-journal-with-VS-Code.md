@@ -2,6 +2,7 @@
 layout: post
 title: Keeping a work journal with VS Code
 share-img: http://tjaddison.com/assets/2018/2018-02-28/JournalSample.png
+tags: [VSCode, Productivity]
 ---
 I've recently started to keep a [work journal](https://peterlyons.com/leveling-up#your-work-journal), and aside from being an incredibly useful document, it also gave me an excuse to learn a lot more about [VS Code](https://code.visualstudio.com/).  After publishing an extension for VS Code yesterday, I'm now declaring my work journal flow done (at least for now...), and the rest of this post will walk you through my setup.
 

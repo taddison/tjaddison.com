@@ -1,6 +1,7 @@
 ---
 layout: post
 title: What makes an excellent database engineer?
+tags: [Management]
 ---
 
 The question of what makes an excellent database engineer is one I'm always asking myself and increasingly find myself answering for others.  The question typically isn't phrased quite so directly, and instead shows up in a variety of discussions:

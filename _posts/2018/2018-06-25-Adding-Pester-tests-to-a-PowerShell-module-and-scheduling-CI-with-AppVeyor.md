@@ -2,6 +2,7 @@
 layout: post
 title: Adding Pester tests to a PowerShell module and scheduling CI with AppVeyor
 share-img: https://tjaddison.com/assets/2018/2018-06-25/TestFailThrow.png
+tags: [PowerShell, Pester, AppVeyor]
 ---
 
 Adding Pester tests to a PowerShell module is probably one of the most valuable development activities you'll be able to perform, and I'd encourage you to do it early in your project.  I left it until rather late with SQLChecks, and as a result have broken the module several times.

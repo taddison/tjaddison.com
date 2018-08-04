@@ -2,6 +2,7 @@
 layout: post
 title: View currently executing tasks in tsqlScheduler
 share-img: http://tjaddison.com/assets/2017-09-03/CurrentlyExecutingTasks.png
+tags: [SQL, tsqlScheduler]
 ---
 [tsqlScheduler 1.0](https://github.com/taddison/tsqlScheduler/releases/tag/1.0) was released today, and now contains a feature which allows you to view currently running tasks by storing information about that task in [context_info](https://docs.microsoft.com/en-us/sql/t-sql/functions/context-info-transact-sql).
 

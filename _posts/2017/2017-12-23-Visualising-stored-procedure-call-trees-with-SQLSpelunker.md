@@ -2,6 +2,7 @@
 layout: post
 title: Visualising stored procedure call trees with SQLSpelunker
 share-img: http://tjaddison.com/assets/2017-12-23/StoredProcedureParser.png
+tags: [SQL, C#]
 ---
 Whether debugging a problem in an existing system, or planning changes to an existing (complex) system, knowing how the call graph for a bit of SQL looks has been invaluable in quickly understanding the domain.
 

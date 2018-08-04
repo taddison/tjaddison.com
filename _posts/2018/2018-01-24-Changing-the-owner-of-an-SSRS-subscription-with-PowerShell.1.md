@@ -2,6 +2,7 @@
 layout: post
 title: Changing the owner of an SSRS subscription with PowerShell
 share-img: http://tjaddison.com/assets/2018/2018-01-24/Script.png
+tags: [SQL, SSRS, PowerShell]
 ---
 
 If you're responsible for an SSRS instance you've probably got a script somewhere to handle changing the owner of a subscription (typically done when a user leaves/changes role and they've got subscriptions that need to keep running).

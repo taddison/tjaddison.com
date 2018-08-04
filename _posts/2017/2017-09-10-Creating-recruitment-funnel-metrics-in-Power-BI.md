@@ -2,6 +2,7 @@
 layout: post
 title: Creating recruitment funnel metrics in Power BI
 share-img: http://tjaddison.com/assets/2017-09-10/FunnelRight.png
+tags: [PowerBI, Recruiting]
 ---
 Creating a funnel chart in Power BI is extremely simple - drop your measure and group by column onto the canvas and format as a funnel chart.  The tricky part is making sure your data is modelled correctly to give you the answers you need.  If we assume that a simple 4-stage recruitment process (New Application - Phone Screen - Face to Face - Hire) has data captured in the following format:
 
