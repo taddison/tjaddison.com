@@ -5,9 +5,9 @@ share-img: https://tjaddison.com/assets/2018/2018-08-05/Endpoints.png
 tags: [Azure, "Application Insights", DevOps]
 ---
 
-[Application Insights] (AI) is a fantastic instrumentation framework that with minimal/zero configuration will start giving you rich data about your applications performance.
+[Application Insights] (AI) is a fantastic instrumentation framework that with minimal/zero configuration will start giving you rich data about your application's performance.
 
-We recently got some reports that one of our website solutions was 'slow' when developing locally, and as much as we'd like to turn to the DBA to blame the database (you know [what DBA stands for], right? I quite like Database Blamed Always...) when you have all of your dependencies instrumented it is easy enough to find the problem.
+We recently got some reports that one of our website solutions was 'slow' when developing locally, and as much as we'd like to turn to the DBA (you know [what DBA stands for], right? I like Database Blamed Always...), when you have all of your dependencies instrumented it is easy enough to find the problem.
 
 From our starting point of 'it runs slow locally, I think it is the database' we'll figure out precisely how slow it is, and whether it really is the database or not.
 
