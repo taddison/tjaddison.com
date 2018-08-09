@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Simplifying alert configuration in the OMS to Slack function app
-share-img: http://tjaddison.com/assets/2017-11-08/ExcelConfiguration.png
+share-img: http://tjaddison.com/assets/2017/2017-11-08/ExcelConfiguration.png
 tags: [OMS, Slack, Azure, "Function Apps"]
 ---
 
@@ -16,7 +16,7 @@ Inspired by a recent [Hanselman post](https://www.hanselman.com/blog/CloudDataba
 
 If you want to look at the finished repo you can see it [on GitHub](https://github.com/taddison/blog-oms-to-slack/tree/master/GenericFunctionExternalConfig) - the rest of the post will focus on the key changes to configuring an alert, as well as how I've implemented those changes.
 
-![Excel Configuration](/assets/2017-11-08/ExcelConfiguration.png)
+![Excel Configuration](/assets/2017/2017-11-08/ExcelConfiguration.png)
 
 <!--more-->
 
