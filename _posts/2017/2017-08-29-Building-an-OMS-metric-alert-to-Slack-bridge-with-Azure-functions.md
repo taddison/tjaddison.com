@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Building an OMS metric alert to Slack bridge with Azure functions
-share-img: http://tjaddison.com/assets/2017-08-29/SlackAlerts.png
+share-img: http://tjaddison.com/assets/2017/2017-08-29/SlackAlerts.png
 tags: [OMS, Slack, Azure, "Function Apps"]
 ---
 [Previously](/2017/08/23/migrating-function-app-scripts-to-a-class-library) we deployed a function app with three functions to send Slack notifications for OMS alerts based on CPU, memory, and disk.  We'll now deploy a function with a single function designed to handle any OMS metric alert and send it to slack.  As an added bonus we'll also support:
@@ -11,7 +11,7 @@ tags: [OMS, Slack, Azure, "Function Apps"]
 - Sending alerts to multiple channels based on either server or metric name
 - Configuring defaults directly in the OMS alert, allowing rapid deployment of new alerts
 
-![Example Alerts](/assets/2017-08-29/SlackAlerts.png)
+![Example Alerts](/assets/2017/2017-08-29/SlackAlerts.png)
 
 If you want to get started quickly:
 
@@ -42,7 +42,7 @@ For every metric you want to alert on an OMS alert must be configured.  While yo
 
 Note that this example contains defaults appropriate for my environment - you may wish to modify the frequency of checks, thresholds, and suppressions.
 
-![Example Alert Config](/assets/2017-08-29/AlertConfig.png)
+![Example Alert Config](/assets/2017/2017-08-29/AlertConfig.png)
 
 ###  Search Query
 
