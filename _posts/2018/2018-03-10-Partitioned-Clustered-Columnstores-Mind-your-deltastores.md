@@ -43,7 +43,7 @@ where t.ServerId = 99999999
 and t.InsertDateTime>= cast(getutcdate() - 1 as datetime2(3));
 ```
 
->Partition elimination won't work if your data types are more precise than the column you're partitiong on.  In our case using `getutcdate()` would have been convered to datetime2(7), more precise than our `InsertDateTime` column which is `datetime2(3)`, resulting in a full table scan [ouch].  Segment elimination has no such qualms about data type precision!
+>Partition elimination won't work if your data types are more precise than the column you're partitiong on.  In our case using `getutcdate()` would have been converted to datetime2(7), more precise than our `InsertDateTime` column which is `datetime2(3)`, resulting in a full table scan [ouch].  Segment elimination has no such qualms about data type precision!
 
 ```
 Table 'Telemetry'. Scan count 101, logical reads 1548578, physical reads 0, read-ahead reads 1363208, lob logical reads 0, lob physical reads 0, lob read-ahead reads 0.
