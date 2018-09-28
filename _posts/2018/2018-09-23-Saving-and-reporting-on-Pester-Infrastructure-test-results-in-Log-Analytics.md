@@ -14,7 +14,7 @@ Once you've got your infrastructure tests running interactively you'll probably 
 - When was the last time this test failed?
 - How is the health of my estate trending over time?
 
-Once you've invested time into building out a library of Pester *tests* for your infrastructure, what you really want to do is analyse the Pester test *results*.  There are various examples out there that discuss how to persist results to files, XML, SQL databases - but none of these options have the advantages of shipping to Log Analytics provides - which is what we'll discuss today.  A few reasons why I think think sending your results to Log Analytics is the superior choice:
+Once you've invested time into building out a library of Pester *tests* for your infrastructure, what you really want to do is analyse the Pester test *results*.  There are various examples out there that discuss how to persist results to files, XML, SQL databases - but none of these options have the advantages that shipping to Log Analytics provides - which is what we'll discuss today.  A few reasons why I think think sending your results to Log Analytics is the superior choice:
 
 - Extremely powerful query language (KQL)
 - Can be queried & consumed by a web browser, Power BI, REST API, Flow, Azure Monitor (for alerting)
@@ -23,13 +23,15 @@ Once you've invested time into building out a library of Pester *tests* for your
 - No impact on the systems under test (how many DBAs have spent time performance tuning their monitoring databases :)?)
 - Great operating cost (free tier lets you log _a lot_ of Pester results every month)
 
-If you don't have a Log Analytics workspace I did a fairly detailed writeup last month: [Getting started with Log Analytics and PowerShell logging].
+If you don't already have a Log Analytics workspace I did a fairly detailed writeup last month: [Getting started with Log Analytics and PowerShell logging].
 
 <!--more-->
 
 ## Pester Result Schema
 
-While we could log an absolutely minimal object to Log Analytics, I've found that adding a little more structure is helpful.  We'll be building the result objects in PowerShell, and then sending the objects to be stored in a table in Log Analytics.  Property names are suffixed with their data type when ingested to Log Analytics, shown below as their LA Name (Log Analytics Name).
+While we could log an absolutely minimal object to Log Analytics, I've found that adding a little more structure is helpful for both debugging and analysing test results.
+
+We'll be building the result objects in PowerShell, and then sending the objects to be stored in a table in Log Analytics.  The below table shows the property names, as well as their column name in the table in Log Analytics.  Columns are suffixed with their data type when created in Log Analytics, shown below as their LA Name (Log Analytics Name).
 
 |Property|LA Name|Description|
 |---|---|---|
@@ -50,13 +52,13 @@ While we could log an absolutely minimal object to Log Analytics, I've found tha
 
 >We're going to map the value of `InvocationStartTime` to the built-in field `TimeGenerated`.  If no field is supplied, `TimeGenerated` defaults to ingestion time.
 
-The great thing about the [Data Collector API] is that these fields are all optional, and so if you don't want to use the full schema you don't have to (perhaps your tests won't use context, or you won't care about host/target computer).
+The great thing about the [Data Collector API] is that these fields are all optional, and so if you don't want to use the full schema you don't have to (perhaps your tests won't use context, or you won't care about host/target).
 
 Some columns that deserve a little more explanation are `BatchId` and `InvocationId`.
 
 ### Batches and Invocations
 
-Most infrastructure tests I run tend to come in a format that looks something like the following pseudocode):
+Most infrastructure tests I run tend to come in a format that looks something like the following (pseudocode):
 
 ```powershell
 for($thingToTest in $listOfThingsToTest) {
@@ -64,13 +66,13 @@ for($thingToTest in $listOfThingsToTest) {
 }
 ```
 
-The execution of the whole script would be a **Batch**.  Every call to `Invoke-Pester` is a separate **Invocation**, which can have zero or more test results (technically an invocation has 0..N Describes, each of which has 0..N contexts, each of which has 0..N tests).
+The execution of the whole script would be a **Batch**.  Every call to `Invoke-Pester` is a separate **Invocation**, which can have zero or more test results (technically an invocation has 0..N Describes, each of which has 0..N Contexts, each of which has 0..N Tests).
 
 Being able to look at batches & invocations will let you detect issues like:
-	- Incomplete batches (a hard-error knocked it out half-way)
-	- Overall runtime vs. Invocation runtime (vs. test runtime)
+- Incomplete batches (a hard-error knocked it out half-way)
+- Overall runtime vs. Invocation runtime (vs. test runtime)
 
-Rather than collecting your results and posting them in one go, I would encourage you to post them after every Invoke-Pester call.  There are times when your automation will fail, and having incomplete results will assist in telling you how far your batch got before failing (vs. Having no results if you wait until the end to try and post them).
+Rather than collecting your results and posting them in one go, I would encourage you to post them after every Invoke-Pester call.  There are times when your automation will fail, and having incomplete results will assist in telling you how far your batch got before failing (vs. having no results if you wait until the end to try and post them).
 
 With batches and invocations our pseudocode now looks something like this (I've also included an example call to post data to Log Analytics):
 
@@ -85,19 +87,21 @@ foreach($thingToTest in $listOfThingsToTest) {
 }
 ```
 
-Note the usage of the `PassThru` switch - this is required to capture the results of the Pester tests in the $results variable.
+Note the usage of the `PassThru` switch - this is required to capture the results of the Pester tests in the `$results` variable.
 
 >The `Export-LogAnalytics` function is part of [SQLChecks], though you can build something very similar with the example PowerShell on the [Data Collector API] page.  You can see the definition of the function on GitHub - [ExportLogAnalytics function].  The source to the referenced function is also available on GitHub - [Get-LogAnalyticsSignature].
 
 ## Working with the Pester result object
 
-The object returned from `Invoke-Pester` needs a bit of work to transform it into the schema we outlined above.  The property `TestResult` is an array of result objects, with one object for every test executed.  Each object contains information about the Describe, Context, Test as well as the result and timing information.  We use the `TestResult` to build our array of PesterResult objects to sent to Log Analytics:
+The object returned from `Invoke-Pester` needs a bit of work to transform it into the schema we outlined above.  The `$results` object contains a property `TestResult`, which is an array of result objects (one object for every test executed).
+
+Each result object contains information about the Describe, Context, and Test, as well as the result (pass/fail) and timing information.  We use the `TestResult` to build our array of PesterResult objects to sent to Log Analytics:
 
 ```powershell
 $results = Invoke-Pester -PassThru
 $pesterResults = @()
 
-foreach($testResult in $results.TestResult) {  
+foreach($testResult in $results.TestResult) {
   $pesterResults += [PSCustomObject]@{
   TimeTaken  = $testResult.Time.TotalMilliseconds
   Passed = $testResult.Passed
@@ -112,11 +116,11 @@ foreach($testResult in $results.TestResult) {
 Export-LogAnalytics $pesterResults @exportLogAnalyticsArguments
 ```
 
+The above example extracts the data from the Pester test results and no more (missing are things like `BatchId`, `Target`, etc.).  Note that the above code is perfectly valid and can be used to quickly get started logging results.
+
 ### A more complex example
 
-The above example extracts the data from the Pester test results and no more (missing are things like BatchId, TargetComputer, etc.).  The above code is perfectly valid and can be used to quickly get started logging results.
-
-A more complex example is shown below - this is taken from [SQLChecks] which iterates over configuration files and performs one call to `Invoke-Pester` (wrapped by `Invoke-SQLChecks`) per file being tested - in this case each file represents an instance of SQL Server.
+A more complete example is shown below - this is taken from [SQLChecks] which iterates over configuration files and performs one call to `Invoke-Pester` (wrapped by `Invoke-SQLChecks`) per file being tested - in this case each file represents an instance of SQL Server.
 
 ```powershell
 $batchId = [System.Guid]::NewGuid()
@@ -209,7 +213,7 @@ PesterResult_CL
 ) on BatchId_g
 ```
 
-This is a pretty common query (find the most recent batch and show me all the results), though you might also want to find the most recent *complete* batch - when you're doing testing you might end up posting lots of small batches with only one invocation or one test.  The below query finds all batches from the last 7 days and then allows you to filter by size, only showing the most recent batch with more than 900 tests:
+While the most recent batch is a pretty common requirement, you may have different batch sizes (people running ad-hoc tests in the day are one example of smaller batches).  One method I've used to find the most recent *complete* batch -is to look for queries that contain more than `N` results - I know my typical SQL checks have 900 tests, so the below query lets me filter out any small ad-hoc or incomplete batches:
 
 ```kql
 PesterResult_CL
@@ -225,7 +229,7 @@ PesterResult_CL
 
 ### Showing failures only
 
-When there are failures, you can quickly view details by filtering on the boolean column `Passed_b`.  The below projects only the essential columns.
+When there are failures, you can quickly view details by filtering on the boolean column `Passed_b`.  The below projects only the essential columns:
 
 ```kql
 PesterResult_CL
@@ -241,7 +245,7 @@ PesterResult_CL
 | project TimeGenerated, Describe_s, Name_s, FailureMessage_s
 ```
 
-In this specific example the result mean the trace flags configured on the server differ from the expected traceflags by a count of one.
+> In this specific example the result means that the trace flags configured on the server differ from the expected trace flags by a count of one.
 
 ![One test failure](/assets/2018/2018-09-23/TraceFlags.png)
 
@@ -263,11 +267,13 @@ PesterResult_CL
 | order by Failed desc
 ```
 
+> In this case it looks like we have some data file space issues in addition to the trace flag problem.
+
 ![Test Summary](/assets/2018/2018-09-23/PassCount.png)
 
 ### Showing test or machine history
 
-If we want to look at how a single test is performing over the estate, the below query shows the status of the `Data file space used` Describe by percent success (0% = all tests failed, 100% = all tests passed).  This also splits by target computer.  Note we multiply the count by 1.0 to turn it into a float, rather than an integer (which would floor our result to always 0 or 1).
+We might want to look at how a single test is performing over the estate.  The below query shows the status of the `Data file space used` Describe by percent success (0% = all tests failed, 100% = all tests passed), split by target.  Note we multiply the count by 1.0 to turn it into a float, rather than an integer (which would floor our result to always 0 or 1).
 
 ```kql
 PesterResult_CL
@@ -280,13 +286,13 @@ PesterResult_CL
 | render timechart 
 ```
 
-The below graph shows an example of a few targets which have stayed with no failures (yay!), one which was partially failing (note the Y axis starts at 0.5) for a long time and recently was fixed, and another which partially failed and then recovered.
+> The below graph shows an example of a few targets which have never had a failure (yay!), one target which was partially failing (note the Y axis starts at 0.5) for a long time and recently was fixed, and another which partially failed and then recovered.
 
 ![Test pass rate](/assets/2018/2018-09-23/SuccessRate.png)
 
 ### Finding the longest-running Describe block
 
-Finally an example that shows how you can find which one of our describe blocks is taking the longest time.  The below query uses the most recent batch and plots the time taken in milliseconds for each describe block.
+If you're looking to performance tune your infrastructure tests, you'll want to know where the time is being spent.  This final example  shows how you can find which one of the describe blocks is taking the longest time to run.  The example uses the most recent batch and plots the time taken in milliseconds for each describe block.
 
 ```kql
 PesterResult_CL
@@ -301,19 +307,17 @@ PesterResult_CL
 | render barchart 
 ```
 
-In this example checking for `Duplicate Indexes` dominates at almost 140 seconds.
+> In this example checking for `Duplicate Indexes` dominates at almost 140 seconds.
 
 ![Test duration](/assets/2018/2018-09-23/TestTime.png)
 
 ## Summary
 
-Well done if you made it this far - if you're starting from scratch with your infrastructure testing there are quite a lot of steps needed to get here.  The good news is that once you've gone through that pain for your first set of tests, onboarding and analysing the results from subsequent tests is almost trivially easy.
+Well done if you made it this far - if you're starting from scratch with your infrastructure testing there are a lot of steps needed to get here.  The good news is that once you've gone through all this setup for your first set of tests, onboarding and analysing the results from subsequent tests is very easy.
 
-By having all your Pester results stored in Log Analytics you're able to inspect the health of your estate now and historically very quickly, and can either share access to those tests directly (granting people the ability to write their own queries over your results), or by creating dashboards (perhaps leveraging the ability of Power BI to query Log Analytics).
+By having all your Pester results stored in Log Analytics you're able to inspect the health of your estate now and historically very quickly, and can additionally share access to those test results directly (giving people the ability to write their own queries over your results), or create and share dashboards (perhaps leveraging the ability of Power BI to query Log Analytics).  Some other options you have to leverage your results in Log Analytics include creating alerts with Azure Monitor (alert on Pester failures), or scheduling periodic reports with Flow (a daily summary of Pester results).
 
-There are quite a few steps needed to get setup, but once you've got the framework in place (to run your tests, as well as somewhere to ship them to) you will quickly get a lot of value from having the results of all your Pester tests in one place.  This is also a very powerful way of sharing either the direct results with people, or by building dashboards that can be consumed by end-users.  Other options include creating alerts with Azure Monitor, or scheduling periodic reports with Flow.
-
-In the near future I'll be showing how you can leverage Pester to perform data validation checks too, and of course the results will be shipped to Log Analytics for easy querying/monitoring/alerting.
+In the near future I'll be showing how you can use Pester to perform data validation checks too - the results will, of course, be shipped to Log Analytics for easy querying/monitoring/alerting.
 
 [Pester]: https://github.com/pester/Pester
 [SQLChecks]: https://github.com/taddison/SQLChecks
