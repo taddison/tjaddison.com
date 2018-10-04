@@ -71,10 +71,6 @@ share-links-active:
 # Remove this if you don't want a link in the footer
 url-pretty: "tjaddison.com"  # eg. "deanattali.com/beautiful-jekyll"
 
-# --- Misc --- #
-# Fill in your Disqus shortname (NOT the userid) if you want to support Disqus comments
-disqus: tjaddison
-
 # Fill in your Google Analytics ID to track your website using GA
 google_analytics: "UA-85466441-1"
 
