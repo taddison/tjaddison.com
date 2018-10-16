@@ -136,7 +136,7 @@ If you look at the URL you'll see how you can modify them to fit your own projec
 
 ```markdown
 [![Build Status](https://img.shields.io/appveyor/ci/taddison/SQLChecks.svg)](https://ci.appveyor.com/project/taddison/sqlchecks)
-[![Test Status](https://img.shields.io/appveyor/tests/taddison/SQLChecks.svg)]s(https://ci.appveyor.com/project/taddison/sqlchecks/build/tests)
+[![Test Status](https://img.shields.io/appveyor/tests/taddison/SQLChecks.svg)](https://ci.appveyor.com/project/taddison/sqlchecks/build/tests)
 ```
 
 ## Next Steps
