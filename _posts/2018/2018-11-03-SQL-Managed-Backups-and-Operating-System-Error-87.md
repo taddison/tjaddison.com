@@ -8,7 +8,9 @@ tags: [SQL, Azure]
 We use [SQL Managed backups] for our on-premises SQL Servers, and have been very impressed with it (from a speed, management, and cost perspective).  Shortly after deploying the solution though the SQL error logs started to log errors when attempting to read managed backups:
 
 ```
-BackupIoRequest::ReportIoError: read failure on backup device 'https://allthebackups.blob.core.windows.net/ServerOne/DatabaseOne_ac7caecc997f4cf192d3befba2ed00c4_11b995a1cb9a49d4a40d2bc2f181e17a_20180202100928+00.log'. Operating system error 87(The parameter is incorrect.).
+BackupIoRequest::ReportIoError: read failure on backup device
+'https://allthebackups.blob.core.windows.net/ServerOne/LongFileName.log'.
+Operating system error 87(The parameter is incorrect.).
 ```
 
 Nothing suggested there were any issues - backups were still being taken, our backup chain wasn't broken (restores were fine) - but this error was being logged all the time.
