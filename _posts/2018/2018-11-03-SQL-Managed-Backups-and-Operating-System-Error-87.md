@@ -20,7 +20,9 @@ Understanding where the error came from and how to fix it required a better unde
 
 ## How does managed backup know what backups are available?
 
-This doesn't appear to be documented anywhere, but we were able (through reasoning and monitoring) to establish the following set of operations happens to maintain the list of 'what backups are in Azure':
+> The backip in question was from an availability group - the replica the backup runs from frequently changes, but managed backup (via msdb) always has a full list of available backups for the database.
+
+This doesn't appear to be documented anywhere, but we were able (through a combination of reasoning and monitoring) to establish the following set of operations happens to maintain the list of 'what backups exist for this database':
 
 - Managed backup gets a list of files in the target container
 - Managed backup performs a [restore headeronly] on each file, to get metadata about that file
@@ -28,17 +30,21 @@ This doesn't appear to be documented anywhere, but we were able (through reasoni
 
 ## Why do we get operating system error 87?
 
-After downloading the file and attempting to restore it, we realised the backup was corrupt.  The file size tipped us off to the fact this was probably a partially complete backup.  We were able to reproduce this by killing an in-flight backup request, which generated a partial (and corrupt) backup.
+After downloading the file that was generating the error and attempting to restore it, we realised the backup was corrupt.  The file size tipped us off to the fact this was probably a partially complete backup (kilobytes rather than megabytes).  We were able to generate our own 'corrupt' backups by killing an in-flight backup operation, which generated a partial (and corrupt) backup in blob storage.
 
-Managed backup will only delete backups that are outside of the retention period, which it can only determine by using the information from the `restore headeronly` command.  Because the backup was corrupt, it would never be eligible for deletion.
+Although managed backup will delete backups that are outside of the retention period, in the case of a corrupt backup it has no idea what database it belongs to, nor how old it is.  As such it won't delete the file, and it'll sit there in the blob storage container forever.
+
+The key thing we came to understand is that there is no central on-premises list of 'what backups I have taken', and that each instance/replica is responsible for interrogating Azure storage to establish what files exist.
+
+> This behavious is actually a pretty neat feature - unlike relying on information in msdb for prior backups (which could have been deleted, corrupted, etc.) managed backup actually interrogates the backup target to determine what is there.
 
 ## How do I fix it?
 
-The fix is to delete the backup file from Azure storage.  We currently do this manually (as it happens so rarely) but it could be automated to react to the message in the SQL error log.  Looking forward something like [automated storage lifecycle management] would allow us to set a policy to automatically delete blobs that exceed our maximum retention period.
+The fix is to delete the corrupted backup file from Azure storage.  We currently do this manually (as it happens so rarely) but it could be automated to react to the message in the SQL error log.  In the future something like [automated storage lifecycle management] would allow us to set a policy to automatically delete blobs that exceed our maximum retention period, meaning this error would auto-heal after the retention period.
 
-The root cause of the corrupt backup for us was a (planned!) failover.  It's also feasible a network blip could terminate an in-progress backup, or perhaps good old-fashioned storage corruption (which is something we really would care about!).
+The root cause of the corrupt backup for us was a (planned!) failover.  It's also feasible a network blip could terminate an in-progress backup, or perhaps good old-fashioned storage corruption (which is something we really would care about, especially if every backup became corrupt).
 
-Outside of some rather sparse documentation (if we'd known how managed backup worked we'd have figured this out a lot faster!) managed backup is something we've been really impressed with - so if you're hitting this scenario hopefully you now know how to fix it.
+Outside of some rather sparse documentation (if we'd known how managed backup worked we'd have figured this out a lot faster) managed backup is something we've been really impressed with - so if you're hitting this scenario you now know how to fix it.
 
 >A big thanks to my colleague Jose for getting to the bottom of this one
 
