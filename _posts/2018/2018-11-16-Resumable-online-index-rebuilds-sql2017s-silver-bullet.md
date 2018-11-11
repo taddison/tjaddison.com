@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Resumable Online Index Rebuilds - SQL 2017's Silver Bullet
-share-img: https://tjaddison.com/assets/2018/2018-11-09/IndexRebuildPaused.png
+share-img: https://tjaddison.com/assets/2018/2018-11-16/IndexRebuildPaused.png
 tags: [SQL]
 ---
 
@@ -65,7 +65,7 @@ select *
 from sys.index_resumable_operations;
 ```
 
-![Paused index rebuild](/assets/2018/2018-11-09/IndexRebuildPaused.png)
+![Paused index rebuild](/assets/2018/2018-11-16/IndexRebuildPaused.png)
 
 ```sql
 alter index IX_ImportantIndex on dbo.ImportantTable resume;
