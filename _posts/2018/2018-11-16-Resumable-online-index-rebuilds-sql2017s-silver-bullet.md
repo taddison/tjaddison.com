@@ -58,7 +58,7 @@ set lock_timeout 1500;
 alter index IX_ImportantIndex on dbo.ImportantTable rebuild with (online = on, resumable = on);
 ```
 
-When the index gets to 100% complete and attempts to perform the switch (acquiring the `SCH-M` lock) and invariably fails, we haven't lost all the work.  Looking in `sys.index_resumable_operations` we'll see our rebuild at 100%, and can attempt to resume it until it completes (all with our lock timeout of 1500ms).
+When the index gets to 100% complete and attempts to perform the switch (acquiring the `SCH-M` lock) and invariably fails, we haven't lost all the work.  Looking in `sys.index_resumable_operations` we'll see our rebuild at 100%.
 
 ```sql
 select *
@@ -66,6 +66,8 @@ from sys.index_resumable_operations;
 ```
 
 ![Paused index rebuild](/assets/2018/2018-11-16/IndexRebuildPaused.png)
+
+The following SQL attempts to complete the rebuild - sitting at 100% the only thing it needs to do is take the schema stability lock to switch out the new index for the old.  As we're using a lock timeout of 1500ms it might take a few tries, but crucially we do not have to start the index rebuild from scratch.
 
 ```sql
 alter index IX_ImportantIndex on dbo.ImportantTable resume;
