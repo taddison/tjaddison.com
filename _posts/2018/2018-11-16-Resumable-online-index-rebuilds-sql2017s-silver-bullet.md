@@ -5,37 +5,37 @@ share-img: https://tjaddison.com/assets/2018/2018-11-16/IndexRebuildPaused.png
 tags: [SQL]
 ---
 
-Every new version of SQL Server comes with a whole grab-bag of new features that open up exciting possibilities, or obviate the need for whole classes of workarounds or problems.  In the runup to SQL 2017 I thought that the [automatic plan correction] was going to be the closest thing to a silver bullet I'd seen in any release so far (in terms of value added vs. effort to implement), but it has been eclipsed for us by the _awesomeness_ of Resumable Online Index Rebuilds (ROIR).
+Every new version of SQL Server comes with a whole grab-bag of new features that open up exciting possibilities, or obviate the need for workarounds (or dirty hacks).  In the runup to deploying SQL 2017 I thought that [automatic plan correction] was going to be the closest thing to a silver bullet I'd seen in any release so far (in terms of value added vs. effort to implement), but it has been eclipsed for us by the _awesomeness_ of Resumable Online Index Rebuilds (ROIR).
 
-In this post I'll talk through a few of the scenarios where this feature really shines, and how it has transformed the way we think about index maintenance.  If you'd like more details about how ROIR are implemented I'd encourage you to read through the [excellent paper detailing ROIR] - this covers how the online index rebuild algorithm was updated, and also demonstrates how in most cases ROIR outperforms the non-resumable version in terms of performance.
+In this post I'll talk through a few of the scenarios where this feature really shines, and how it has transformed the way we think about index maintenance.  If you'd like more details about how ROIR is implemented I'd encourage you to read through the [excellent paper detailing ROIR] - this covers how the online index rebuild algorithm was updated, and also demonstrates how in most cases ROIR outperforms the non-resumable version in terms of performance.
 
 <!--more-->
 
 ## When index rebuilds are kind of a big deal
 
-A few conditions (either alone or all combined) can make index rebuilds a pretty big deal in an environment:
+A few conditions (either individually or in combination) can make index rebuilds a pretty big deal in an environment:
 
 - 24/7 operations (no such thing as a 'quiet time' or maintenance window)
 - Index is very large (takes a long time to rebuild)
 - Transaction volume is high (log truncation being blocked means log utilisation grows rapidly)
 - Presence of Availability Group (AG) replicas (index build has to be replayed on 1...many servers, potentially getting blocked behind queries)
 
-Having enterprise edition (online rebuilds) and fast local-attached drives (NVMe and availability groups) help with the 24/7 and speed issues, but transaction log volume and AG replicas remain challenges.  In the worst case you end up needing a huge transaction log on your primary replica to support the rebuild itself, and then it can grow even larger if redo gets blocked on the secondary replica.
+Having enterprise edition (online rebuilds) and fast local-attached drives (NVMe and availability groups) help with the 24/7 and speed issues, but transaction log volume and AG replicas remain a challenge.  In the worst case you end up needing a huge transaction log on your primary replica to support the rebuild itself, and then it can grow even larger if redo gets blocked on the secondary replica.
 
-Those last two bullet points caused us to go through a pretty rigorous scheduling process for any maintenance on indexes larger than 100GB in any of our high-volume databases.  What should have been an automated script turned into an affair which needed attention from the DB and App teams,  potentially dialling down other operations to reduce load (not to mention the DBA monitoring the log utilisation invariably sweating bullets as the rebuild runs on).  There may have also been some liberal shooting of reporting queries that got ahead of the rebuild on replicas.
+Those last two bullet points caused us to go through a pretty rigorous scheduling process for any maintenance on indexes larger than 100GB in one of our high-volume databases.  What should have been an automated script turned into an affair which needed attention from the DB and App teams, potentially dialling down other operations to reduce load (not to mention the DBA monitoring the log utilisation and invariably sweating bullets as the rebuild chugs along).  There may have also been several reported incidents of reporting queries on replicas being killed if they got in front of a `SCH-M` lock.
 
 Not ideal, and that isn't even the worst of it.
 
 ## Throwing away good work
 
-On our most mission critical instances, we've got no tolerance for any kind of blocking against critical tables.  As such we take an extremely paranoid approach to any index of rebuild against our core tables:
+On our mission critical instances we have no tolerance for any kind of blocking on critical tables.  As such we take an extremely paranoid approach to any index of rebuild:
 
 ```sql
 set lock_timeout 1500;
 alter index IX_ImportantIndex on dbo.ImportantTable rebuild with (online = on);
 ```
 
-Online index rebuilds aren't entirely lock-free - there is a `SCH-M` lock taken at the end of the process, and although [managed lock priority] allows you to wait at low priority the options for what to do if your session _can't_ get the lock are pretty limited:
+Online index rebuilds aren't entirely lock-free - there is a `SCH-M` lock taken at the start and end of the process, and although [managed lock priority] allows you to wait at low priority the options for what to do if your session _can't_ get the lock after the timeout are pretty limited:
 
 - Kill yourself
 - Kill anything blocking you
@@ -49,16 +49,16 @@ The first option is the only one we'd really entertain, but in our testing we fo
 
 ## Enter the silver bullet - ROIR
 
-In order to support resumable index operations the rebuild algorithm was changed to support batching.  Internally SQL Server will operate on batches of rows, committing work every 100k rows and allowing the transaction log to truncate as the operation proceeds.  In the event that the rebuild is stopped (either by a pause command, or something like a network blip/failover) the maximum amount of work that is 'lost' will be a single batch.
+In order to support resumable index operations in SQL 2017 the rebuild algorithm was changed to support batching.  Internally SQL Server will operate on batches of rows, committing work every 100k rows and allowing the transaction log to truncate after each batch.  In the event that the rebuild is stopped (either by a pause command, or something like a network blip/failover) the maximum amount of work that is 'lost' will be a single batch.
 
-The icing on the cake is that resumable index rebuilds will typically execute _faster_ than the regular, non-resumable variety.   With a small change our index maintenance suddenly becomes almost risk-free:
+The icing on the cake is that resumable index rebuilds will typically execute _faster_ than the regular, non-resumable variety.  With a small change our index maintenance suddenly becomes almost risk-free:
 
 ```sql
 set lock_timeout 1500;
 alter index IX_ImportantIndex on dbo.ImportantTable rebuild with (online = on, resumable = on);
 ```
 
-When the index gets to 100% complete and attempts to perform the switch (acquiring the `SCH-M` lock) and invariably fails, we haven't lost all the work.  Looking in `sys.index_resumable_operations` we'll see our rebuild at 100%.
+If the rebuild gets to 100% complete and attempts to perform the switch (acquiring the `SCH-M` lock) and fails, we haven't lost all the work.  Looking in `sys.index_resumable_operations` we'll see our rebuild at 100%.
 
 ```sql
 select *
