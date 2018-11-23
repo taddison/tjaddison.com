@@ -327,6 +327,6 @@ In the near future I'll be showing how you can use Pester to perform data valida
 [Pester book]: https://leanpub.com/pesterbook
 [Getting started with Log Analytics and PowerShell logging]: https://tjaddison.com/2018/08/26/Getting-started-with-Log-Analytics-and-PowerShell-logging
 [Data Collector API]: https://docs.microsoft.com/en-us/azure/log-analytics/log-analytics-data-collector-api
-[ExportLogAnalytics function]: https://github.com/taddison/SQLChecks/blob/master/src/SQLChecks/Functions/Public/Export-LogAnalytics.ps1
-[Get-LogAnalyticsSignature]: https://github.com/taddison/SQLChecks/blob/master/src/SQLChecks/Functions/Private/Get-LogAnalyticsSignature.ps1
-[Invoke-SqlChecksToLogAnalytics function]: https://github.com/taddison/SQLChecks/blob/master/src/SQLChecks/Functions/Public/Invoke-SqlChecksToLogAnalytics.ps1
+[ExportLogAnalytics function]: https://github.com/taddison/SQLChecks/blob/44e1b4461fa7be9279eaecc206cfe3dca25e2250/src/SQLChecks/Functions/Public/Export-LogAnalytics.ps1
+[Get-LogAnalyticsSignature]: https://github.com/taddison/SQLChecks/blob/44e1b4461fa7be9279eaecc206cfe3dca25e2250/src/SQLChecks/Functions/Private/Get-LogAnalyticsSignature.ps1
+[Invoke-SqlChecksToLogAnalytics function]: https://github.com/taddison/SQLChecks/blob/44e1b4461fa7be9279eaecc206cfe3dca25e2250/src/SQLChecks/Functions/Public/Invoke-SqlChecksToLogAnalytics.ps1
