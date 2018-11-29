@@ -35,7 +35,7 @@ The resource group name must be unique within your subscription, and the workspa
 ```powershell
 $resourceGroupName = "RG-LogAnalytics-Test"
 $location = "eastus"
-$workspaceName = "LogAnalyticsTestWorkspace
+$workspaceName = "LogAnalyticsTestWorkspace"
 
 New-AzureRmResourceGroup -Name $resourceGroupName -Location $location
 
