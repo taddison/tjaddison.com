@@ -21,7 +21,7 @@ Invoke-SomeOtherOperation -Server serverOne # internally calls Get-ListOfDatabas
 
 Sometimes it makes sense to rework the script to accept the argument, though other times it can be cleaner to modify the call site to _cache_ the result, rather than changing every function to accept and potentially pass through that argument.
 
-The rest of this post will go through a specific example that motivated caching, and call out a few caveats if you do decide to implement caching.
+The rest of this post will go through a specific example that motivated caching, share a generic function that implements scriptblock-based caching, and call out a few and gotchas.
 
 <!--more-->
 
