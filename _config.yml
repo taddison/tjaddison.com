@@ -38,6 +38,7 @@ author:
   name: Tim Addison
   github: taddison    # eg. daattali
   twitter: tjaddison   # eg. daattali
+  linkedin: tjaddison
 
 # Select which links to show in the footer
 footer-links-active:
@@ -48,7 +49,7 @@ footer-links-active:
   google-plus: false
   github: true
   reddit: false
-  linkedin: false
+  linkedin: true
   xing: false
   stackoverflow: false
   snapchat: false
