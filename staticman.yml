@@ -5,7 +5,6 @@
 # To encrypt strings use the following endpoint:
 # https://{STATICMAN API INSTANCE}/v3/encrypt/{TEXT TO BE ENCRYPTED}
 # {STATICMAN API INSTANCE} defaults to staticman3.herokuapp.com
-
 comments:
   # (*) REQUIRED
   #
@@ -25,8 +24,7 @@ comments:
   # Name of the branch being used. Must match the one sent in the URL of the
   # request.
   branch: "gh-pages"   #  use "master" for user page
-  #branch: "gh-pages" #  use "gh-pages" for project page
-
+  
   commitMessage: "New comment by {fields.name}"
 
   # (*) REQUIRED
@@ -53,17 +51,8 @@ comments:
   # Otherwise, entries will be published to the main branch automatically.
   moderation: true
 
-  # Akismet spam detection.
-  # akismet:
-  #   enabled: true
-  #   author: "name"
-  #   authorEmail: "email"
-  #   authorUrl: "url"
-  #   content: "message"
-  #   type: "comment"
-
   # Name of the site. Used in notification emails.
-  # name: "Your Site"
+  name: "tjaddison.com"
 
   # Notification settings. When enabled, users can choose to receive notifications
   # via email when someone adds a reply or a new comment. This requires an account
@@ -99,10 +88,10 @@ comments:
   # reCAPTCHA (OPTIONAL)
   # Register your domain at https://www.google.com/recaptcha/ and choose reCAPTCHA V2
   # Use your OWN siteKey and secret.
-  reCaptcha:
-    enabled: false
-    siteKey: #"6Lfl_IwUAAAAAMKxAHetPvcYUrVLlRA6pyN9RzxF"
-    # (!) ENCRYPT reCaptcha secret key using Staticman /encrypt endpoint
-    # i.e. https://staticman3.herokuapp.com/v3/encrypt/{your-site-secret}
-    # For more information, https://staticman.net/docs/encryption
-    secret: #"dEuDqgXfqggxyqRiP6hBgk8mYxGhGqf7/hySkKKQBGAtyCcfhOHGUEvGEZe4FJyZoCz4CNuGoD4eHzE7nFZkiKbM4ZS+TZwJCiOK9trYM+FYw278Z2djSPznL/WvWSk+WBbrAMErTM0+uszMf0hSCzR0s1CEB0FveRoW/cgCMN4="
+  # reCaptcha:
+  #   enabled: false
+  #   siteKey: #"6Lfl_IwUAAAAAMKxAHetPvcYUrVLlRA6pyN9RzxF"
+  #   # (!) ENCRYPT reCaptcha secret key using Staticman /encrypt endpoint
+  #   # i.e. https://staticman3.herokuapp.com/v3/encrypt/{your-site-secret}
+  #   # For more information, https://staticman.net/docs/encryption
+  #   secret: #"dEuDqgXfqggxyqRiP6hBgk8mYxGhGqf7/hySkKKQBGAtyCcfhOHGUEvGEZe4FJyZoCz4CNuGoD4eHzE7nFZkiKbM4ZS+TZwJCiOK9trYM+FYw278Z2djSPznL/WvWSk+WBbrAMErTM0+uszMf0hSCzR0s1CEB0FveRoW/cgCMN4="
