@@ -6,7 +6,7 @@
 # https://{STATICMAN API INSTANCE}/v3/encrypt/{TEXT TO BE ENCRYPTED}
 # {STATICMAN API INSTANCE} defaults to staticman3.herokuapp.com
 
-comments:
+# comments:
   # (*) REQUIRED
   #
   # Names of the fields the form is allowed to submit. If a field that is
