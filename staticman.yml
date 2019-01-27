@@ -85,9 +85,9 @@ comments:
   transforms:
     email: md5
 
-  reCAPTCHA (OPTIONAL)
-  Register your domain at https://www.google.com/recaptcha/ and choose reCAPTCHA V2
-  Use your OWN siteKey and secret.
+  #reCAPTCHA (OPTIONAL)
+  #Register your domain at https://www.google.com/recaptcha/ and choose reCAPTCHA V2
+  #Use your OWN siteKey and secret.
   reCaptcha:
     enabled: false
     siteKey: "6Lfl_IwUAAAAAMKxAHetPvcYUrVLlRA6pyN9RzxF"
