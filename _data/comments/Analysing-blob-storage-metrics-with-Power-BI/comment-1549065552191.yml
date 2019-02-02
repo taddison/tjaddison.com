@@ -1,0 +1,7 @@
+_id: 5f17e600-267d-11e9-9351-b7068d7f87ad
+message: "Someone asked how you might build a dashboard showing metrics from multiple accounts.  It's a little more work but the following steps should get you started.\r\n\r\nAssuming you already have the metrics working for your first account...\r\n\r\n- In the query editor copy & paste the `Blob Metrics` or `Blob Capacity` table\r\n- In the `Source` step double click on the cog, and change the account name or URL from the parameter to text, and input the address of the second (or third...) storage account\r\n- When you refresh you will be prompted for the new account key\r\n\r\nThe last steps would be to combine the tables - I'd suggest adding a new column which has the name of the storage account before creating a new query as a _combine_ query that appends all the tables together.\r\n\r\nHope this helps!"
+name: Tim
+email: af3db98b63e4df67463a7dbcbdac34c3
+url: 'https://tjaddison.com'
+hidden: ''
+date: '2019-02-01T23:59:12.190Z'
