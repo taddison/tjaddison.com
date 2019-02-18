@@ -65,7 +65,7 @@ Get-AzureRmSubscription | Select-Object SubscriptionId, TenantId, SubscriptionNa
 
 ## Configuring the app for local testing
 
-Clone the application from the [ScaleDownEventHubs repository](https://github.com/taddison/ScaleDownEventHubs) on GitHub.
+Clone the application from the [ScaleDownEventHubs repository](https://github.com/taddison/ScaleDownEventHubs/tree/aedbb76b40c0acd9a5a9bb952280f4d6e614093e) on GitHub.
 
 Once cloned modify your *local.settings.json* file to look like the example file, using the values you acquired in the previous steps.
 
