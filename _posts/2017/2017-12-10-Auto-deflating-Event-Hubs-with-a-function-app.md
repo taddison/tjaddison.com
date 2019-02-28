@@ -2,7 +2,7 @@
 layout: post
 title: Auto deflating Event Hubs with a function app
 share-img: http://tjaddison.com/assets/2017/2017-12-10/FunctionOutput.png
-tags: [Azure, EventHubs, C#]
+tags: [Azure, EventHubs, C#, Function Apps]
 ---
 EventHubs have supported [auto-inflate/scale-up](https://docs.microsoft.com/en-us/azure/event-hubs/event-hubs-auto-inflate) for a while now, but don't come with an equivalent to auto deflate/scale-down.  If your workload doesn't have sustained throughput requirements you'll probably benefit from periodically scaling back.
 
