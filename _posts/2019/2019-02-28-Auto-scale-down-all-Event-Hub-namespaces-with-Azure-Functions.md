@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Auto scale down all Event Hub namespaces with Azure Functions
-share-img: https://tjaddison.com/assets/2019/TBD.png
+share-img: https://tjaddison.com/assets/2019/2019-02-28/CodeSnippet.png
 tags: [Azure, EventHubs, C#, PowerShell, Function Apps]
 ---
 
@@ -9,7 +9,6 @@ A little over a year ago I lamented the lack of an auto-deflate feature for Even
 
 With the addition of a PowerShell script to programatically grant the appropriate permissions to all of your namespaces, you can be up and running (or deflating) in a matter of minutes.
 
-##SOME KIND OF PHOTO - maybe the logs?##
 <!--more-->
 ## Function App
 
@@ -129,11 +128,13 @@ traces
 | extend Op = ""
 | parse message with "Namespace:" namespace:string "in RG:" resourcegroup:string "already at or below target capacity (Current:" fromTU:int  "Target:" toTU:int *
 )
+| order by timestamp desc
+| project timestamp, Op, resourcegroup, namespace, fromTU, toTU 
 ```
 
 One example result set is shown below - this shows multiple namespaces surviving the scaler unscathed (unscaled?), and a couple which were scaled-in.  You can also see that there a few namespaces which don't scale down to 1 - these have `ScaleDownTUs` set on them.
 
-##PICTURE OF THE SCALER QUERY##
+![Scaler query result](/assets/2019/2019-02-28/ScaleDownQuery.png)
 
 [ScaleDown Blog]: https://tjaddison.com/2017/12/10/Auto-deflating-Event-Hubs-with-a-function-app
 [ScaleDownEventHubs repo]: https://github.com/taddison/ScaleDownEventHubs
