@@ -49,7 +49,6 @@ $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($sp.Secret)
 $password = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
 [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($BSTR)
 
-# Save these for later!
 Write-Output "ClientId: $applicationId"
 Write-Output "ClientSecret: $password"
 ```
@@ -71,7 +70,7 @@ The below script looks pretty daunting, though by default it will do nothing as 
 ```powershell
 Login-AzAccount
 
-$appName = "EventHubScaler" # can be anything you want
+$appName = "EventHubScaler"
 $appRole = "Contributor"
 $WhatIf = $true # set to false to add role
 
@@ -88,7 +87,10 @@ foreach($sub in $subs) {
         $autoInflate = $hub.IsAutoInflateEnabled
         $maxCapacity = $hub.MaximumThroughputUnits
 
-        $assignments = Get-AzRoleAssignment -Scope $hub.Id -RoleDefinitionName $appRole -ServicePrincipalName $applicationId 
+        $assignments = Get-AzRoleAssignment -Scope $hub.Id `
+            -RoleDefinitionName $appRole `
+            -ServicePrincipalName $applicationId
+
         if($null -eq $assignments) {
             $assignString = ""
         } else {
@@ -101,7 +103,9 @@ foreach($sub in $subs) {
             if($null -eq $assignments) {
                 if($WhatIf -eq $false) {
                     Write-Output "Adding $appRole role for $appName on $hubName"
-                    New-AzRoleAssignment -Scope $hub.Id -RoleDefinitionName $appRole -ApplicationId $applicationId | Out-Null
+                    New-AzRoleAssignment -Scope $hub.Id `
+                        -RoleDefinitionName $appRole `
+                        -ApplicationId $applicationId | Out-Null
                 } else {
                     Write-Output "[WHATIF] Adding $appRole role for $appName on $hubName"
                 }
