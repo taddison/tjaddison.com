@@ -5,9 +5,9 @@ share-img: https://tjaddison.com/assets/2019/2019-02-28/CodeSnippet.png
 tags: [Azure, EventHubs, C#, PowerShell, Function Apps]
 ---
 
-A little over a year ago I lamented the lack of an auto-deflate feature for Event Hubs, and offered a way to [programatically scale down your namespaces][ScaleDown Blog].  That solution did it's job well but required a re-deploy each time you wanted to bring a namespace under control.  Today we'll look at an upgraded function app which will programatically discover and scale-down all Event Hub namespaces it has access to.
+A little over a year ago I lamented the lack of an auto-deflate feature for Event Hubs, and offered a way to [programatically scale down your namespaces][ScaleDown Blog].  That solution still works, but requires a redeploy each time you wanted to add a namespace.  Today we'll look at an upgraded function app which  programatically discovers and scales-down all Event Hub namespaces it has access to.
 
-With the addition of a PowerShell script to programatically grant the appropriate permissions to all of your namespaces, you can be up and running (or deflating) in a matter of minutes.
+With the addition of a PowerShell script to grant the appropriate permissions to all of your namespaces, you can be up and running (or deflating) in a matter of minutes.
 
 <!--more-->
 ## Function App
