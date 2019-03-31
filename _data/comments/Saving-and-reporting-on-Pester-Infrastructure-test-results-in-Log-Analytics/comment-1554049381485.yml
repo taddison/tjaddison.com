@@ -1,0 +1,7 @@
+_id: 402e09a0-53d1-11e9-b3c5-295a240c9847
+message: "Thanks [@Arcontar](https://twitter.com/arcontar) for pointing out an easy trap to fall into (one that I've fallen into many times).\r\n\r\nWhen using the `Export-LogAnalytics` function the parameter `$object` needs to be an _array_ of PSObjects - if you pass a single object you'll find all your test results concatenated into a single column on one row, rather than one row per-result.\r\n\r\nAs he quite correctly points out the easiest way to stop people falling into this pit of failure is to add validation to `Export-LogAnalytics` to ensure the `$object` property is a `[PSObject[]]`."
+name: Tim
+email: af3db98b63e4df67463a7dbcbdac34c3
+url: 'https://tjaddison.com'
+hidden: ''
+date: '2019-03-31T16:23:01.485Z'
