@@ -137,7 +137,7 @@ future: false
 staticman:
   repository : "taddison/tjaddison.com" # GitHub username/repository eg. "daattali/beautiful-jekyll"
   branch     : "gh-pages" # eg. "master" If you're not using `master` branch, then you also need to update the `branch` parameter in `staticman.yml`
-  endpoint   : "https://dev.staticman.net/v3/entry/github/" # URL of your own deployment (with trailing slash) (will fallback to a public GitLab instance)
+  endpoint   : "https://api.staticman.net/v3/entry/github/" # URL of your own deployment (with trailing slash) (will fallback to a public GitLab instance)
   reCaptcha:
     siteKey: "6Lfl_IwUAAAAAMKxAHetPvcYUrVLlRA6pyN9RzxF"
     secret:  "dEuDqgXfqggxyqRiP6hBgk8mYxGhGqf7/hySkKKQBGAtyCcfhOHGUEvGEZe4FJyZoCz4CNuGoD4eHzE7nFZkiKbM4ZS+TZwJCiOK9trYM+FYw278Z2djSPznL/WvWSk+WBbrAMErTM0+uszMf0hSCzR0s1CEB0FveRoW/cgCMN4="
