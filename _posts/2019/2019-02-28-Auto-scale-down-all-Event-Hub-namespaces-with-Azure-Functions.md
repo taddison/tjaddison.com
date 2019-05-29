@@ -37,7 +37,7 @@ var tenantId = config["TenantId"];
 
 ## Service Principal
 
-The script below will create a [service principal] - this is what we'll be granting permissions to perform operations on our Event Hub namespaces.
+The script below will create a [service principal] - this is what we'll be granting permissions to so that it can perform operations on our Event Hub namespaces.
 
 ```powershell
 Login-AzAccount
@@ -59,7 +59,7 @@ If you set the `ClientId` and `ClientSecret` application settings you'll now be 
 
 ## Permissions
 
-By default the new service principal has now permissions.  In order to let it do something useful we're going to assign it `Contributor` permissions on all namespaces we have access to.
+By default the new service principal has no permissions.  In order to let it do something useful we're going to assign it `Contributor` permissions on all namespaces we have access to.
 
 The below script looks pretty daunting, though by default it will do nothing as `$WhatIf` is set to `$true` - when running the script it will echo what it *would* do.  If there is no work to do it will echo the status of each Event Hub namespace it discovers, as shown in the screenshot below.  When you're ready to add permissions set `$WhatIf` to `$false`.
 
