@@ -13,7 +13,7 @@ I've found the below queries very helpful starting points for three main scenari
 - Reacting to a monitoring alert based on overall ingestion volumes
 - Testing out a configuration change/new solution and observing the impact on data ingested
 
-The latter is particularly important before rolling a change to a workspace with long retention - you wouldn't want (hypothically :)) to accidentally ingest 100GB of IIS logs and then be forced to retain them for 2 years...
+The latter is particularly important before rolling a change to a workspace with long retention - you wouldn't want (hypothetically :)) to accidentally ingest 100GB of IIS logs and then be forced to retain them for 2 years...
 
 ## Workspace solution/data type usage
 
