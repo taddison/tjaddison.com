@@ -9,7 +9,7 @@ Application Insights (now part of [Azure Monitor]) uses a [pay-per-GB-ingested m
 
 ![Application Insights default cap](/assets/2019/2019-05-31/DailyCap.png)
 
-Left unchecked each resource like this could end up costing you a cool **$7,118.50 per month**!
+Left unchecked each resource like this could end up costing you a cool **$7,118.50 per month**.
 
 In order to vet your estate and bring it under control, the PowerShell script below will check every Application Insights resource you have deployed against a limit you set, and optionally reduce anything exceeding that limit to a more reasonable cap.
 
@@ -31,7 +31,7 @@ The script has three different configuration options:
 
 Once the script executes you'll be asked to authenticate to Azure, and it will then enumerate all subscriptions and all Application Insights resources in those subscriptions.
 
-Once completed the script will report a list of all actions (either Ignore, Under Cap, or Reduce To X) for each resource it encountered.  The example below shows this running against an environment where there is a single resource ignored, and then others are all under the cap - in this case set to 10GB.
+Once complete the script will report a list of all actions (either Ignore, Under Cap, or Reduce To X) for each resource it encountered.  The example below shows this running against an environment where there is a single resource ignored, and then others are all under the cap - in this case set to 10GB.
 
 ![Script results](/assets/2019/2019-05-31/AppInsightsResults.png)
 
