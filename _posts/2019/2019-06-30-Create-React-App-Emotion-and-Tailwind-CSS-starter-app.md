@@ -5,7 +5,7 @@ share-img: https://tjaddison.com/assets/2019/2019-06-30/EmotionWind-Starter.png
 tags: [React, Emotion, Tailwind CSS]
 ---
 
-Get up and running fast with [Create React App] (CRA), [Emotion], and [Tailwind CSS]:
+Get up and running fast with [Create React App] (CRA), [Emotion], and [Tailwind CSS] by cloning the [cra-tailwind-emotion-starter] git repo:
 
 ```bash
 git clone https://github.com/aedificatorum/cra-tailwind-emotion-starter.git my-app
@@ -111,6 +111,7 @@ The following posts were helpful in putting this starter app together:
 - [React and Tailwind]
 - [Tailwind CSS in JS]
 
+[cra-tailwind-emotion-starter]: https://github.com/aedificatorum/cra-tailwind-emotion-starter.git
 [Create React App]: https://facebook.github.io/create-react-app/
 [Tailwind CSS]: https://tailwindcss.com/
 [Emotion]: https://emotion.sh/docs/introduction
