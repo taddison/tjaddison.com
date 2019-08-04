@@ -55,7 +55,7 @@ From here you can either add additional users to the allow list, or if it's a pe
 
 Some things to keep in mind:
 
-- There is no longer any unauthenticated access possible to the Firestore - if you need Firestore data to render your app/login this won't work
+- There is no longer any unauthenticated access possible to Firestore - if you need Firestore data to render your app/login this won't work
  - Everyone who can access the app gets full access to everything - read and write
 
 ## References and further reading
