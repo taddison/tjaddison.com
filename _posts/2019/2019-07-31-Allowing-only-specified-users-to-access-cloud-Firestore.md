@@ -15,6 +15,8 @@ I'll show the steps needed to do this below, the pre-requisites are:
 - Authentication configured for the project with at least one user authenticated
   - Every user you want to grant access will need to authenticate with the project as we're using their firebase User UID, which is unique to each project
 
+<!--more-->
+
 ## Implementing an allow list in Firestore
 
 To make this work we're going to create a security rule which will allow users to read/write any part of the database only if they exist in a specific collection, which we will manually populate.
