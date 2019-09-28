@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Create React App, Emotion, and Tailwind CSS starter app
-share-img: https://tjaddison.com/assets/2019/2019-06-30/EmotionWind-Starter.png
+share-img: https://tjaddison.com/tjaddison.com/assets/2019/2019-06-30/EmotionWind-Starter.png
 tags: [React, Emotion, Tailwind CSS]
 ---
 
@@ -14,7 +14,7 @@ npm install
 npm start
 ```
 
-![App Splash](/assets/2019/2019-06-30/EmotionWind-Starter.png)
+![App Splash](/tjaddison.com/assets/2019/2019-06-30/EmotionWind-Starter.png)
 
 <!--more-->
 

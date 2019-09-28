@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Changing the owner of an SSRS subscription with PowerShell
-share-img: http://tjaddison.com/assets/2018/2018-01-24/Script.png
+share-img: http://tjaddison.com/tjaddison.com/assets/2018/2018-01-24/Script.png
 tags: [SQL, SSRS, PowerShell]
 ---
 

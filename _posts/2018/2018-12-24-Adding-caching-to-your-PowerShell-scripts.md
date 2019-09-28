@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Adding caching to your PowerShell scripts
-share-img: https://tjaddison.com/assets/2018/2018-12-24/GetCachedScriptBlockResults.png
+share-img: https://tjaddison.com/tjaddison.com/assets/2018/2018-12-24/GetCachedScriptBlockResults.png
 tags: [PowerShell]
 ---
 Most of the time when some part of a script takes a long time to run and you want to re-use the result you'll store it in a variable:

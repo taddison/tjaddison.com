@@ -1,19 +1,19 @@
 ---
 layout: post
 title: Styling markdown posts with Tailwind CSS in GatsbyJS
-share-img: https://tjaddison.com/assets/2019/2019-08-31/StyledPost.png
+share-img: https://tjaddison.com/tjaddison.com/assets/2019/2019-08-31/StyledPost.png
 tags: [GatsbyJS, Tailwind, Blog]
 ---
 
 I'm slowly working on migrating the blog from [Jekyll] to [GatsbyJS]. I've decided to use [Tailwind CSS] to style the blog, which means that out of the box (once Tailwind's pretty [aggressive reset][tailwind preflight] has been applied) all the markdown posts end up being unstyled. In the below example the only styling on any element comes courtesy of the [gatsby-remark-prismjs] package, which handles code styling.
 
-![Unstyled Post](/assets/2019/2019-08-31/UnstyledPost.png)
+![Unstyled Post](/tjaddison.com/assets/2019/2019-08-31/UnstyledPost.png)
 
 <!--more-->
 
 After adding some styling to the `site.css` file we're able to get the post looking halfway decent.
 
-![Styled Post](/assets/2019/2019-08-31/StyledPost.png)
+![Styled Post](/tjaddison.com/assets/2019/2019-08-31/StyledPost.png)
 
 I wanted to keep the Tailwind reset applied to the non-markdown parts of the site, so the blog template renders each post into a `div` with the `markdown` class, and the `site.css` is updated to include the below definitions. I'm using [Purge CSS] to strip unused classes, and because these classes aren't directly used anywhere (e.g. `className="..."`) we need to tell Purge CSS to ignore them.
 

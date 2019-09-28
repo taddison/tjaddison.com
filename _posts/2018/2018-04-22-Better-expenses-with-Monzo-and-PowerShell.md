@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Better expenses with Monzo and PowerShell
-share-img: http://tjaddison.com/assets/2018/2018-04-22/Export.png
+share-img: http://tjaddison.com/tjaddison.com/assets/2018/2018-04-22/Export.png
 tags: [PowerShell, Monzo]
 ---
 While making submitting expenses _fun_ is probably impossible, we can leverage Monzo and PowerShell to start automating away some of the manual steps involved.  In my specific case I need to submit monthly expenses with receipt support and categorise each expense.  Combine Monzo's tagging, image support, and CSV export with PowerShell's ability to...well do pretty much anything, and we have a workable solution!
@@ -19,7 +19,7 @@ Export-ExpenseFromMonzo -MonzoExport $monzoExport -ExportFolder $exportFolder
 
 This creates a CSV that contains transactions tagged with #expense in the Monzo account currency, downloads the first image associated with each transaction (and names it to match the line in the CSV), and maps the Monzo category to the internal expense reporting category.
 
-![Expense Folder](/assets/2018/2018-04-22/Export.png)
+![Expense Folder](/tjaddison.com/assets/2018/2018-04-22/Export.png)
 
 A little copy-paste later and I'm done.  Read on for details on how it works, and where you can customise the data you return.  If you want to use this on your own data (or try it out on some sample data) you can get everything you need in this [example GitHub repo](https://github.com/taddison/blog-monzo-expenses/blob/master/Expenses.ps1).
 

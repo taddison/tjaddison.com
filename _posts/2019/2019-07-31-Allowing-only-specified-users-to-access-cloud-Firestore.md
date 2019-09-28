@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Allowing only specified users to access Cloud Firestore
-share-img: https://tjaddison.com/assets/2019/2019-07-31/Rules.png
+share-img: https://tjaddison.com/tjaddison.com/assets/2019/2019-07-31/Rules.png
 tags: [JavaScript, Firestore, Security]
 ---
 
@@ -23,11 +23,11 @@ To make this work we're going to create a security rule which will allow users t
 
 To get started you'll need the User UID of a user who has previously authenticated with the project.  In the example below I'm using testuser.
 
-![User list](/assets/2019/2019-07-31/Users.png)
+![User list](/tjaddison.com/assets/2019/2019-07-31/Users.png)
 
 Create a new collection called `allow-users` and for the first document specify the User UID as the document ID.  No need to add any fields (though I've found adding a friendly name to remember what the UIDs map to is helpful).
 
-![ALlow users collection](/assets/2019/2019-07-31/AllowUsers.png)
+![ALlow users collection](/tjaddison.com/assets/2019/2019-07-31/AllowUsers.png)
 
 Now configure your Firestore security rules.  If you're using the [Firebase CLI] you would deploy these using a `firebase.rules` file, or you can paste into the console and publish.
 
@@ -51,7 +51,7 @@ service cloud.firestore {
 }
 ```
 
-![Rules](/assets/2019/2019-07-31/Rules.png)
+![Rules](/tjaddison.com/assets/2019/2019-07-31/Rules.png)
 
 From here you can either add additional users to the allow list, or if it's a personal project you're done!
 

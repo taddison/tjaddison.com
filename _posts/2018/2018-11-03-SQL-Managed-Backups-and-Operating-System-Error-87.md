@@ -1,7 +1,7 @@
 ---
 layout: post
 title: SQL Managed Backups and Operating System Error 87
-share-img: https://tjaddison.com/assets/2018/2018-11-03/SQLManagedBackup.png
+share-img: https://tjaddison.com/tjaddison.com/assets/2018/2018-11-03/SQLManagedBackup.png
 tags: [SQL, Azure]
 ---
 

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Using the SQLChecks library for SQL Server configuration management
-share-img: http://tjaddison.com/assets/2017/2017-12-03/LocalhostTests.png
+share-img: http://tjaddison.com/tjaddison.com/assets/2017/2017-12-03/LocalhostTests.png
 tags: [PowerShell, Pester, SQL, SQLChecks]
 ---
 Getting started with configuration management can be pretty daunting.  The number of frameworks/tools and their complexity can end up being a significant barrier to actually getting started (requiring you to answer both 'which framework should I use' and then 'how do I actually use it').  The key to making progress is to start small and make configuration management part of your daily/weekly checks.
@@ -10,7 +10,7 @@ To this end I built the [SQLChecks](https://github.com/taddison/SQLChecks) libra
 
 This post will walk through how to set up a basic configuration management process to record and check the state of your SQL Server instances using [Pester](https://github.com/pester/Pester) and SQLChecks.  Once built you can run it interactivley (reporting to the console as shown below), or as part of a schedule to produce a report.
 
-![Pester Tests](/assets/2017/2017-12-03/LocalhostTests.png)
+![Pester Tests](/tjaddison.com/assets/2017/2017-12-03/LocalhostTests.png)
 
 *In this example we've failed one of the tests that is checking that the right trace flags are set on the server (and both of them are missing!)*
 
@@ -46,7 +46,7 @@ The SpConfig property is actually a collection of properties, and you can discov
 Get-DbaSpConfigure -SqlInstance localhost | Out-GridView
 ```
 
-![SpConfigure Options](/assets/2017/2017-12-03/SpConfigureGridview.png)
+![SpConfigure Options](/tjaddison.com/assets/2017/2017-12-03/SpConfigureGridview.png)
 
 >The **ConfigName** is what you need to use in your SpConfig section.  For every value you want to check, list the ConfigName and value you expect.
 

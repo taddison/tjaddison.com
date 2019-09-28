@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Cleaning up database mail profiles and accounts
-share-img: http://tjaddison.com/assets/2018/2018-04-24/mailboxes.jpg
+share-img: http://tjaddison.com/tjaddison.com/assets/2018/2018-04-24/mailboxes.jpg
 tags: [SQL, "Database Mail"]
 ---
 

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Saving and reporting on Pester Infrastructure test results in Log Analytics
-share-img: https://tjaddison.com/assets/2018/2018-09-23/SuccessRate.png
+share-img: https://tjaddison.com/tjaddison.com/assets/2018/2018-09-23/SuccessRate.png
 tags: [Azure, "Log Analytics", DevOps, PowerShell]
 ---
 
@@ -247,7 +247,7 @@ PesterResult_CL
 
 > In this specific example the result means that the trace flags configured on the server differ from the expected trace flags by a count of one.
 
-![One test failure](/assets/2018/2018-09-23/TraceFlags.png)
+![One test failure](/tjaddison.com/assets/2018/2018-09-23/TraceFlags.png)
 
 ### Showing batch aggregates
 
@@ -269,7 +269,7 @@ PesterResult_CL
 
 > In this case it looks like we have some data file space issues in addition to the trace flag problem.
 
-![Test Summary](/assets/2018/2018-09-23/PassCount.png)
+![Test Summary](/tjaddison.com/assets/2018/2018-09-23/PassCount.png)
 
 ### Showing test or machine history
 
@@ -288,7 +288,7 @@ PesterResult_CL
 
 > The below graph shows an example of a few targets which have never had a failure (yay!), one target which was partially failing (note the Y axis starts at 0.5) for a long time and recently was fixed, and another which partially failed and then recovered.
 
-![Test pass rate](/assets/2018/2018-09-23/SuccessRate.png)
+![Test pass rate](/tjaddison.com/assets/2018/2018-09-23/SuccessRate.png)
 
 ### Finding the longest-running Describe block
 
@@ -309,7 +309,7 @@ PesterResult_CL
 
 > In this example checking for `Duplicate Indexes` dominates at almost 140 seconds.
 
-![Test duration](/assets/2018/2018-09-23/TestTime.png)
+![Test duration](/tjaddison.com/assets/2018/2018-09-23/TestTime.png)
 
 ## Summary
 

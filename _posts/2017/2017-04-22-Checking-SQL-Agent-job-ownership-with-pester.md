@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Checking SQL Agent job ownership with Pester
-share-img: http://tjaddison.com/assets/2017/2017-04-22/PesterFailure.png
+share-img: http://tjaddison.com/tjaddison.com/assets/2017/2017-04-22/PesterFailure.png
 tags: [PowerShell, Pester, SQL]
 ---
 
@@ -24,11 +24,11 @@ Describe "SQL Agent on localhost" {
 
 This executes the query against our localhost, and compares the result (count(*) aliased as Jobs) against the expected value of 0.  When it works we get the following output:
 
-![Successful Pester test](/assets/2017/2017-04-22/PesterSuccess.png)
+![Successful Pester test](/tjaddison.com/assets/2017/2017-04-22/PesterSuccess.png)
 
 If there are any jobs which are not owned by SA then we'll be told how many there are.
 
-![Failed Pester test](/assets/2017/2017-04-22/PesterFailure.png)
+![Failed Pester test](/tjaddison.com/assets/2017/2017-04-22/PesterFailure.png)
 
 To really leverage this you'll want to target multiple servers.  To do that from a single script we can provide a hard-coded list of servers and then call the test in a loop.
 
@@ -45,7 +45,7 @@ foreach($server in $servers) {
 }
 ```
 
-![Multiple Pester tests](/assets/2017/2017-04-22/PesterMultipleSuccess.png)
+![Multiple Pester tests](/tjaddison.com/assets/2017/2017-04-22/PesterMultipleSuccess.png)
 
 The list of servers could come from a text file, or a [CMS Server](https://docs.microsoft.com/en-us/sql/relational-databases/administer-multiple-servers-using-central-management-servers).
 

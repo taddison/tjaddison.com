@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Should I Automate It?
-share-img: https://tjaddison.com/assets/2019/2019-04-30/ShouldIAutomateIt.png
+share-img: https://tjaddison.com/tjaddison.com/assets/2019/2019-04-30/ShouldIAutomateIt.png
 tags: [Automation, Management, Excel]
 ---
 
@@ -9,7 +9,7 @@ Whenever you need to do something more than once it's often tempting to invest i
 
 This post isn't about convincing you that it's time to automate that thing (if you're not already 'automate by default' go check out [XKCD 1205] - once you are fully on the automation train come back here).  This post is about giving you another tool to help decide to _not automate_ that thing.
 
-![Automation Calculator](/assets/2019/2019-04-30/Spreadsheet.png)
+![Automation Calculator](/tjaddison.com/assets/2019/2019-04-30/Spreadsheet.png)
 
 Download the [Calculator] to follow along!
 
@@ -48,7 +48,7 @@ These multipliers (and you can adjust them) are what drive the `ROI Fast` and `R
 
 The results of this automation show that this automation has a long-term payoff - 1-2 years before we land in the definitely bucket (which is where even the `Slow ROI` shows a payoff).  If the process is likely to stay static and not require changes over the next 2 years then this might be worth automating?
 
-![Automation Calculator](/assets/2019/2019-04-30/AutomateTheCollection.png)
+![Automation Calculator](/tjaddison.com/assets/2019/2019-04-30/AutomateTheCollection.png)
 
 ## So, should I automate it?
 
@@ -68,4 +68,4 @@ It's pretty rare you'll ever make a decision solely based on the numbers here - 
 And that last one is really key, especially when you get into larger projects that might take days or even weeks.  Every automation effort invariably pays off over some time period, but whether you could be doing something even more valuable with your time is where the realy hard work of prioritzation comes in.  Hopefully the calculator will help you decide that automation project you were considering isn't worth putting into that list of 'things that need to be prioritised', and give you one less thing to worry about.
 
 [XKCD 1205]: https://xkcd.com/1205/
-[Calculator]: /assets/2019/2019-04-30/SampleWorkbook.xlsx
+[Calculator]: /tjaddison.com/assets/2019/2019-04-30/SampleWorkbook.xlsx

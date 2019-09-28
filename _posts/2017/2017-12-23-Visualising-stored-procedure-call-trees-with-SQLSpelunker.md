@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Visualising stored procedure call trees with SQLSpelunker
-share-img: http://tjaddison.com/assets/2017/2017-12-23/StoredProcedureParser.png
+share-img: http://tjaddison.com/tjaddison.com/assets/2017/2017-12-23/StoredProcedureParser.png
 tags: [SQL, C#]
 ---
 Whether debugging a problem in an existing system, or planning changes to an existing (complex) system, knowing how the call graph for a bit of SQL looks has been invaluable in quickly understanding the domain.
@@ -210,5 +210,5 @@ Moving away from procedures only I'd love to extend this idea to report what tab
 
 Each line below represents a nested call to another proc all branching out from a single call.  Curious to know what else is out there :)
 
-![Namespace configuration](/assets/2017/2017-12-23/ARatherLongProcedure.png)
+![Namespace configuration](/tjaddison.com/assets/2017/2017-12-23/ARatherLongProcedure.png)
 

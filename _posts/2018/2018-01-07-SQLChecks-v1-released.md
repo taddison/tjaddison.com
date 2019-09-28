@@ -1,13 +1,13 @@
 ---
 layout: post
 title: SQLChecks v1 Released
-share-img: http://tjaddison.com/assets/2018/2018-01-07/PesterTests.png
+share-img: http://tjaddison.com/tjaddison.com/assets/2018/2018-01-07/PesterTests.png
 tags: [PowerShell, Pester, SQL, SQLChecks]
 ---
 
 After using SQLChecks to help tame our production instances for a few months, [v1 has now been released](https://github.com/taddison/SQLChecks/releases/tag/1.0).  This first release includes documentation on all supported tests, as well as limited guidelines on how to structure any new tests/PowerShell functions.
 
-![Pester Tests](/assets/2018/2018-01-07/PesterTests.png)
+![Pester Tests](/tjaddison.com/assets/2018/2018-01-07/PesterTests.png)
 
 Get the [latest version of SQLChecks from GitHub](https://github.com/taddison/SQLChecks).
 <!--more-->

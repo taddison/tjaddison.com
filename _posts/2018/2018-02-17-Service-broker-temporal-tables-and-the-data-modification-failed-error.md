@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Service Broker, Temporal Tables, and the 'Data modification failed' error
-share-img: http://tjaddison.com/assets/2018/2018-02-17/ErrorSlug.png
+share-img: http://tjaddison.com/tjaddison.com/assets/2018/2018-02-17/ErrorSlug.png
 tags: [SQL, "Service Broker", "Temporal Tables"]
 ---
 
@@ -49,7 +49,7 @@ As well as in the [ISO technical report on SQL Support for Time-Related Informat
 In all of our previous troubleshooting we were dealing with very short (typically implicit) transactions, and so we were incorrectly thinking about concurrency at the statement level, rather than the transaction level.
 
 ## Repro
->If you'd like to try this repro out yourself you can download [this script](/assets/2018/2018-02-17/createobjects.sql) to create the database and all objects required.
+>If you'd like to try this repro out yourself you can download [this script](/tjaddison.com/assets/2018/2018-02-17/createobjects.sql) to create the database and all objects required.
 
 The two procedures we'll be looking at are the one which inserts the payment request:
 
